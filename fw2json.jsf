@@ -1,0 +1,44 @@
+// Fireworks Extension: Command
+// Create XML from Fill Color of Named Objects.
+// version: 0.0.1
+// auther: @littlebusters
+// license: MIT
+
+(function()
+{
+	var d = fw.getDocumentDOM();
+	var fwJSON = {"documentMeta": {"grid" : {}}, "pages": []};
+	var pageSetter = d.getPageSetter();
+	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+
+	fwJSON.documentMeta.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
+	fwJSON.documentMeta.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
+	fwJSON.documentMeta.pageCount = d.pagesCount;
+	fwJSON.documentMeta.docName = d.docTitleWithoutExtension;
+
+	console.log( d.currentPageNum );
+	for ( var i = 0; i < fwJSON.documentMeta.pageCount; i++ ) {
+		pageSetter.pageNum = i;
+		d = fw.getDocumentDOM();
+
+		fwJSON.pages[i] = {};
+		fwJSON.pages[i].pageName = d.pageName;
+		fwJSON.pages[i].backgroundColor = d.backgroundColor;
+		fwJSON.pages[i].width = d.width;
+		fwJSON.pages[i].height = d.height;
+		fwJSON.pages[i].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
+	};
+
+	console.log( fwJSON	);
+
+	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
+	// var saveURL = Files.getDirectory( folderURL ) + '/' + fwJSON.documentMeta.docName + '.txt';
+	// fw.textOutputEncoding = 'utf-8';
+	// Files.createFile( saveURL, '.txt', '');
+	// var fileWrite = Files.open( saveURL, true );
+	// fileWrite.writeUTF8( fwJSON.toString() );
+	// fileWrite.close();
+
+	// console.log(saveURL);
+
+})();
