@@ -1,5 +1,5 @@
 // Fireworks Extension: Command
-// Create XML from Fill Color of Named Objects.
+// Create JSON from Fireworks PNG.
 // version: 0.0.1
 // auther: @littlebusters
 // license: MIT
@@ -9,7 +9,16 @@
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentMeta": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
-	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	// var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	var layerType = {
+		"[object RectanglePrimitive]": "rectangle",
+		"[object Text]": "text",
+		"[object Path]": "path",
+		"[object Group]": "layer group",
+		"[object Instance]": "symbol",
+		"[object SliceHotspot]": "slice",
+		"[object Layer]": "layer"
+	}
 
 	fwJSON.documentMeta.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
 	fwJSON.documentMeta.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
@@ -17,19 +26,38 @@
 	fwJSON.documentMeta.docName = d.docTitleWithoutExtension;
 
 	console.log( d.currentPageNum );
-	for ( var i = 0; i < fwJSON.documentMeta.pageCount; i++ ) {
-		pageSetter.pageNum = i;
+	for ( var pageIndex = 0; pageIndex < fwJSON.documentMeta.pageCount; pageIndex++ ) {
+		pageSetter.pageNum = pageIndex;
 		d = fw.getDocumentDOM();
 
-		fwJSON.pages[i] = {};
-		fwJSON.pages[i].pageName = d.pageName;
-		fwJSON.pages[i].backgroundColor = d.backgroundColor;
-		fwJSON.pages[i].width = d.width;
-		fwJSON.pages[i].height = d.height;
-		fwJSON.pages[i].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
+		fwJSON.pages[pageIndex] = {};
+		fwJSON.pages[pageIndex].pageName = d.pageName;
+		fwJSON.pages[pageIndex].backgroundColor = d.backgroundColor;
+		fwJSON.pages[pageIndex].width = d.width;
+		fwJSON.pages[pageIndex].height = d.height;
+		fwJSON.pages[pageIndex].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
+		fwJSON.pages[pageIndex].layers = [];
+
+		for ( var layerIndex = 0; layerIndex < d.layers.length; layerIndex++ ) {
+			fwJSON.pages[pageIndex].layers[layerIndex] = getLayerData( d.layers[layerIndex] );
+		}
 	};
 
-	console.log( fwJSON	);
+	console.log( fwJSON );
+
+	function getLayerData( _tgt ) {
+		var layerData = {};
+		layerData.layerName = _tgt.name;
+
+		return layerData;
+	}
+
+	function getElemData( _tgt ) {
+		var elemData = {};
+		elemsData.elemData = _tgt.name;
+
+		return elemData;
+	}
 
 	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
 	// var saveURL = Files.getDirectory( folderURL ) + '/' + fwJSON.documentMeta.docName + '.txt';
