@@ -17,7 +17,8 @@
 		"[object Group]": "layer group",
 		"[object Instance]": "symbol",
 		"[object SliceHotspot]": "slice",
-		"[object Layer]": "layer"
+		"[object Layer]": "layer",
+		"[object Image]": "bitmap"
 	}
 
 	fwJSON.documentMeta.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
@@ -25,7 +26,6 @@
 	fwJSON.documentMeta.pageCount = d.pagesCount;
 	fwJSON.documentMeta.docName = d.docTitleWithoutExtension;
 
-	console.log( d.currentPageNum );
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentMeta.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
 		d = fw.getDocumentDOM();
@@ -38,23 +38,48 @@
 		fwJSON.pages[pageIndex].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
 		fwJSON.pages[pageIndex].layers = [];
 
-		for ( var layerIndex = 0; layerIndex < d.layers.length; layerIndex++ ) {
-			fwJSON.pages[pageIndex].layers[layerIndex] = getLayerData( d.layers[layerIndex] );
-		}
+		fwJSON.pages[pageIndex].layers = getLayerData( d.layers );
 	};
 
 	console.log( fwJSON );
 
 	function getLayerData( _tgt ) {
-		var layerData = {};
-		layerData.layerName = _tgt.name;
+		var layerData = [];
+
+		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
+			layerData[layerIndex] = {};
+			layerData[layerIndex].layerName = _tgt[layerIndex].name;
+			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( layerIndex );
+			layerData[layerIndex].elems = getElemData( _tgt[layerIndex].elems );
+		}
 
 		return layerData;
 	}
 
+	var FwtoJSON = FwtoJSON || {};
+
+	// FwtoJSON.prototype.getElemsData = function ( _tgt ) {
+
+	// }
 	function getElemData( _tgt ) {
-		var elemData = {};
-		elemsData.elemData = _tgt.name;
+		var elemData = [];
+
+		for ( var childIndex = 0, elemIndex = 0 ; childIndex < _tgt.length; childIndex++ ) {
+			console.log( _tgt[childIndex].toString() );
+			if ( '[object Layer]' != _tgt[childIndex].toString() ) {
+				elemData[elemIndex] = {};
+				elemData[elemIndex].type = layerType[_tgt[childIndex].toString()];
+				elemData[elemIndex].name = _tgt[childIndex].name || elemData[elemIndex].type;
+				elemData[elemIndex].width = _tgt[childIndex].width;
+				elemData[elemIndex].height = _tgt[childIndex].height;
+				elemData[elemIndex].top = _tgt[childIndex].top;
+				elemData[elemIndex].left = _tgt[childIndex].left;
+				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
+				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
+				elemData[elemIndex].visible = _tgt[childIndex].visible;
+				elemIndex++;
+			}
+		}
 
 		return elemData;
 	}
