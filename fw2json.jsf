@@ -38,19 +38,19 @@
 		fwJSON.pages[pageIndex].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
 		fwJSON.pages[pageIndex].layers = [];
 
-		fwJSON.pages[pageIndex].layers = getLayerData( d.layers );
+		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
 	console.log( fwJSON );
 
-	function getLayerData( _tgt ) {
+	function getLayerAttrs( _tgt ) {
 		var layerData = [];
 
 		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
 			layerData[layerIndex] = {};
 			layerData[layerIndex].layerName = _tgt[layerIndex].name;
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( layerIndex );
-			layerData[layerIndex].elems = getElemData( _tgt[layerIndex].elems );
+			layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
 		}
 
 		return layerData;
@@ -61,7 +61,7 @@
 	// FwtoJSON.prototype.getElemsData = function ( _tgt ) {
 
 	// }
-	function getElemData( _tgt ) {
+	function getElemAttrs( _tgt ) {
 		var elemData = [];
 
 		for ( var childIndex = 0, elemIndex = 0 ; childIndex < _tgt.length; childIndex++ ) {
@@ -82,6 +82,14 @@
 		}
 
 		return elemData;
+	}
+
+	function getFillAttrs( _tgt ) {
+		var elemData = {};
+
+		elemData.fillColor = _tgt.fillColor;
+
+
 	}
 
 	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
