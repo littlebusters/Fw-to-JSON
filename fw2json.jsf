@@ -88,9 +88,40 @@
 		var elemData = {};
 
 		elemData.fillColor = _tgt.fillColor;
+		elemData.feather = _tgt.fill.feather;
 
-
+		return elemData;
 	}
+
+	function getGradientAtts( _tgt ) {
+		var elemData = {};
+
+		elemData.gradientType = _tgt.fill.shape;
+		elemData.gradientStopPoint = [{}, {}, {}];
+		elemData.gradientStopPoint[0].x = _tgt.fillHandle1.x;
+		elemData.gradientStopPoint[0].y = _tgt.fillHandle1.y;
+		elemData.gradientStopPoint[1].x = _tgt.fillHandle2.x;
+		elemData.gradientStopPoint[1].y = _tgt.fillHandle2.y;
+		elemData.gradientStopPoint[2].x = _tgt.fillHandle3.x;
+		elemData.gradientStopPoint[2].y = _tgt.fillHandle3.y;
+
+		return elemData;
+	}
+
+	function getGradientStop( _tgt ) {
+		var elemData = [];
+		var currentPoints = [];
+
+		for ( var i = _tgt.nodes.length - 1; i >= 0; i-- ) {
+			currentPoints.push( _tgt.nodes[i] );
+		};
+		for ( var i = _tgt.opacityNodes.length - 1; i >= 0; i-- ) {
+			currentPoints.push( _tgt.opacityNodes[i] );
+		};
+
+		return currentPoints;
+	}
+	getGradientStop( sel[0].pathAttributes.fill.gradient );
 
 	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
 	// var saveURL = Files.getDirectory( folderURL ) + '/' + fwJSON.documentMeta.docName + '.txt';
