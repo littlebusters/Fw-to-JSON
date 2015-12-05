@@ -89,12 +89,13 @@ var console = console || {};
 
 				if ( 'layer group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
-					&& 'bitmap' != elemData[elemIndex].type  ) {
+					&& 'bitmap' != elemData[elemIndex].type
+					&& 'slice' != elemData[elemIndex].type  ) {
 					if ( null != _tgt[childIndex].pathAttributes.fill ) {
 						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex].pathAttributes );
 					}
-				} else {
-					console.log( '!is LayerGroup or Symbol' );
+				} else if ( 'slice' == elemData[elemIndex].type ) {
+					elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
 				}
 				elemIndex++;
 			}
@@ -104,6 +105,15 @@ var console = console || {};
 		return elemData;
 	}
 
+	function getExportOptions( _tgt ) {
+		console.log( '-> start' );
+		var attrs = {};
+
+		attrs.exportFormat = _tgt.exportFormat;
+		attrs.jpegQuality = _tgt.jpegQuality;
+
+		return attrs;
+	}
 	function getFillAttrs( _tgt ) {
 		console.log( '-> start' );
 		var elemData = {};
@@ -131,7 +141,6 @@ var console = console || {};
 		elemData.gradientPoint[2].y = _tgt.fillHandle3.y;
 
 		elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
-		console.log( elemData );
 
 		return elemData;
 	}
