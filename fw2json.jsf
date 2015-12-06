@@ -43,16 +43,19 @@ var console = console || {};
 		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
-	var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
-	var saveURL = folderURL + '/' + fwJSON.documentMeta.docName + '.json';
-	fw.textOutputEncoding = 'utf-8';
-	Files.createFile( saveURL, '.json', '');
-	var fileWrite = Files.open( saveURL, true );
 	console.log( fwJSON );
-	// fileWrite.writeUTF8( fwJSON.toSource() );
-	fileWrite.close();
 
-	console.log( folderURL, saveURL );
+	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
+	// var saveURL = folderURL + '/' + fwJSON.documentMeta.docName + '.json';
+	// fw.textOutputEncoding = 'utf-8';
+	// Files.createFile( saveURL, '.json', '');
+	// var fileWrite = Files.open( saveURL, true );
+	// // console.log( fwJSON );
+	// // fileWrite.writeUTF8( 'test write' );
+	// fileWrite.writeUTF8( fwJSON.toSource() );
+	// fileWrite.close();
+
+	// console.log( folderURL, saveURL );
 
 	console.log( '-------------' );
 
@@ -169,10 +172,12 @@ var console = console || {};
 			attrs[i].nodes = [];
 			for ( var j = _tgt[i].nodes.length - 1; j >= 0; j-- ) {
 				attrs[i].nodes[j] = { "isCurvePoint": _tgt[i].nodes[j].isCurvePoint };
-				attrs[i].nodes[j] = { "isCurvePoint": _tgt[i].nodes[j].isCurvePoint };
-				attrs[i].nodes[j].ancherPoint = { "x": _tgt[i].nodes[j].x, "y": _tgt[i].nodes[j].y };
-				attrs[i].nodes[j].succPoint = { "x": _tgt[i].nodes[j].succX, "y": _tgt[i].nodes[j].succY };
-				attrs[i].nodes[j].predPoint = { "x": _tgt[i].nodes[j].predX, "y": _tgt[i].nodes[j].predY };
+				attrs[i].nodes[j].ancherPointX = _tgt[i].nodes[j].x;
+				attrs[i].nodes[j].ancherPointY = _tgt[i].nodes[j].y;
+				attrs[i].nodes[j].succPointX = _tgt[i].nodes[j].succX;
+				attrs[i].nodes[j].succPointY = _tgt[i].nodes[j].succY;
+				attrs[i].nodes[j].predPointX = _tgt[i].nodes[j].predX;
+				attrs[i].nodes[j].predPointY = _tgt[i].nodes[j].predY;
 			};
 		};
 
@@ -198,6 +203,7 @@ var console = console || {};
 		elemData.feather = _tgt.fill.feather;
 		if ( null != _tgt.fill.gradient ) {
 			elemData.gradient = getGradientAtts( _tgt );
+			elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
 		}
 
 		return elemData;
@@ -208,15 +214,14 @@ var console = console || {};
 		var elemData = {};
 
 		elemData.gradientType = _tgt.fill.shape;
-		elemData.gradientPoint = [{}, {}, {}];
-		elemData.gradientPoint[0].x = _tgt.fillHandle1.x;
-		elemData.gradientPoint[0].y = _tgt.fillHandle1.y;
-		elemData.gradientPoint[1].x = _tgt.fillHandle2.x;
-		elemData.gradientPoint[1].y = _tgt.fillHandle2.y;
-		elemData.gradientPoint[2].x = _tgt.fillHandle3.x;
-		elemData.gradientPoint[2].y = _tgt.fillHandle3.y;
+		elemData.gradientPointX = _tgt.fillHandle1.x;
+		elemData.gradientPointY = _tgt.fillHandle1.y;
+		elemData.gradientPointX = _tgt.fillHandle2.x;
+		elemData.gradientPointY = _tgt.fillHandle2.y;
+		elemData.gradientPointX = _tgt.fillHandle3.x;
+		elemData.gradientPointY = _tgt.fillHandle3.y;
 
-		elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
+		// elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
 
 		return elemData;
 	}
