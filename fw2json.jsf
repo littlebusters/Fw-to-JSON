@@ -97,6 +97,9 @@ var console = console || {};
 				} else if ( 'slice' == elemData[elemIndex].type ) {
 					elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
 				}
+				if ( 'path' == elemData[elemIndex].type ) {
+					elemData[elemIndex].bezierPath.push( getPathNodes( _tgt[childIndex].contours ) );
+				}
 				elemIndex++;
 			}
 		}
@@ -104,6 +107,27 @@ var console = console || {};
 
 		return elemData;
 	}
+
+	function getPathNodes( _tgt ) {
+		console.log( '-> start' );
+		var attrs = [];
+
+		for ( var i = _tgt.length - 1; i >= 0; i-- ) {
+			attrs[i] = {};
+			attrs[i].isClosed = _tgt[i].isClosed;
+			attrs[i].nodes = [];
+			for ( var j = _tgt[i].nodes.length - 1; j >= 0; j-- ) {
+				attrs[i].nodes[j] = { "isCurvePoint": _tgt[i].nodes[j].isCurvePoint };
+				attrs[i].nodes[j] = { "isCurvePoint": _tgt[i].nodes[j].isCurvePoint };
+				attrs[i].nodes[j].ancherPoint = { "x": _tgt[i].nodes[j].x, "y": _tgt[i].nodes[j].y };
+				attrs[i].nodes[j].succPoint = { "x": _tgt[i].nodes[j].succX, "y": _tgt[i].nodes[j].succY };
+				attrs[i].nodes[j].predPoint = { "x": _tgt[i].nodes[j].predX, "y": _tgt[i].nodes[j].predY };
+			};
+		};
+
+		return attrs;
+	}
+	//getPathNodes( sel[0].contours );
 
 	function getExportOptions( _tgt ) {
 		console.log( '-> start' );
@@ -114,6 +138,7 @@ var console = console || {};
 
 		return attrs;
 	}
+
 	function getFillAttrs( _tgt ) {
 		console.log( '-> start' );
 		var elemData = {};
