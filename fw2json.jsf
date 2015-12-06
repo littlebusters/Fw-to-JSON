@@ -10,7 +10,7 @@ var console = console || {};
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentMeta": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
-	// var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
 	var layerType = {
 		"[object RectanglePrimitive]": "rectangle",
 		"[object Text]": "text",
@@ -43,12 +43,23 @@ var console = console || {};
 		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
+	var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
+	var saveURL = folderURL + '/' + fwJSON.documentMeta.docName + '.json';
+	fw.textOutputEncoding = 'utf-8';
+	Files.createFile( saveURL, '.json', '');
+	var fileWrite = Files.open( saveURL, true );
+	console.log( fwJSON );
+	// fileWrite.writeUTF8( fwJSON.toSource() );
+	fileWrite.close();
+
+	console.log( folderURL, saveURL );
+
 	console.log( '-------------' );
 
 	// console.log( fwJSON );
 
 	function getLayerAttrs( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var layerData = [];
 
 		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
@@ -69,7 +80,7 @@ var console = console || {};
 
 	// }
 	function getElemAttrs( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var elemData = [];
 
 		for ( var childIndex = 0, elemIndex = 0 ; childIndex < _tgt.length; childIndex++ ) {
@@ -85,7 +96,7 @@ var console = console || {};
 				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
 				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
-				console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
+				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
 
 				if ( 'layer group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
@@ -113,7 +124,7 @@ var console = console || {};
 	}
 
 	function getTextAttrs( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var attrs = {};
 
 		attrs.fontFace = _tgt.initialAttrs.face;
@@ -149,7 +160,7 @@ var console = console || {};
 	//getTextAttrs( sel[0].textRuns );
 
 	function getPathNodes( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var attrs = [];
 
 		for ( var i = _tgt.length - 1; i >= 0; i-- ) {
@@ -170,7 +181,7 @@ var console = console || {};
 	//getPathNodes( sel[0].contours );
 
 	function getExportOptions( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var attrs = {};
 
 		attrs.exportFormat = _tgt.exportFormat;
@@ -180,7 +191,7 @@ var console = console || {};
 	}
 
 	function getFillAttrs( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var elemData = {};
 
 		elemData.fillColor = _tgt.fillColor;
@@ -193,7 +204,7 @@ var console = console || {};
 	}
 
 	function getGradientAtts( _tgt ) {
-		console.log( '-> start' )
+		// console.log( '-> start' );
 		var elemData = {};
 
 		elemData.gradientType = _tgt.fill.shape;
@@ -211,7 +222,7 @@ var console = console || {};
 	}
 
 	function getGradientStops( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start' );
 		var currentPoints = [];
 		var optimazedPoints = [];
 
