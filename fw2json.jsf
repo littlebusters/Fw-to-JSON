@@ -45,7 +45,7 @@ var console = console || {};
 		};
 		fwJSON.pages[pageIndex].layers = [];
 
-		console.log( fwJSON.pages[pageIndex].pageName );
+		// console.log( fwJSON.pages[pageIndex].pageName );
 		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
@@ -72,7 +72,7 @@ var console = console || {};
 	fileWrite.writeUTF8( fwJSON.toSource() );
 	fileWrite.close();
 
-	
+
 
 	function getLayerAttrs( _tgt ) {
 		// console.log( '-> start' );
@@ -83,7 +83,7 @@ var console = console || {};
 			layerData[layerIndex].layerName = _tgt[layerIndex].name;
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( layerIndex );
 
-			console.log( layerData[layerIndex].layerName );
+			// console.log( layerData[layerIndex].layerName );
 			layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
 		}
 
@@ -107,7 +107,7 @@ var console = console || {};
 				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
 				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
-				console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
+				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
 
 				if ( 'layer group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
@@ -115,6 +115,9 @@ var console = console || {};
 					&& 'slice' != elemData[elemIndex].type  ) {
 					if ( null != _tgt[childIndex].pathAttributes.fill ) {
 						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex].pathAttributes );
+					}
+					if ( null != _tgt[childIndex].pathAttributes.brush ) {
+						elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
 					}
 				} else if ( 'slice' == elemData[elemIndex].type ) {
 					if ( null == _tgt[childIndex].exportOptions ) {
@@ -309,6 +312,27 @@ var console = console || {};
 		return optimazedPoints;
 	}
 	// getGradientStops( sel[0].pathAttributes.fill.gradient );
+
+	function getBorderAttrs( _tgt ) {
+		var borderAttrs = {};
+
+		if ( 9 == _tgt.brushColor.length ) {
+			borderAttrs.color = _tgt.brushColor.slice( 0, 7 );
+			borderAttrs.opacity = getOpacityByDigit( _tgt.brushColor.slice( 7, 9 ) );
+		} else {
+			borderAttrs.color = _tgt.brushColor;
+			borderAttrs.opacity = 1
+		}
+		borderAttrs.dashAttr.push( "dash": _tgt.brush.dashOnSize1, "gap": _tgt.brush.dashOffSize1 );
+		borderAttrs.dashAttr.push( "dash": _tgt.brush.dashOnSize2, "gap": _tgt.brush.dashOffSize2 );
+		borderAttrs.dashAttr.push( "dash": _tgt.brush.dashOnSize3, "gap": _tgt.brush.dashOffSize3 );
+		borderAttrs.edge = _tgt.brush.shape;
+		borderAttrs.position = _tgt.brushPlacement;
+		borderAttrs.thickness = _tgt.brush.diameter;
+
+		return borderAttrs;
+	}
+	// getBorderAttrs( sel[0].pathAttributes );
 
 	// utilities
 	function getGradientStopColorOnOpacitySide ( _prevC, _nextC, _posi ) {
