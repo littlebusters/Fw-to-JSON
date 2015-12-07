@@ -36,30 +36,43 @@ var console = console || {};
 		fwJSON.pages[pageIndex].backgroundColor = d.backgroundColor;
 		fwJSON.pages[pageIndex].width = d.width;
 		fwJSON.pages[pageIndex].height = d.height;
-		fwJSON.pages[pageIndex].guide = {"x": d.guides.hGuides, "y": d.guides.vGuides};
+		fwJSON.pages[pageIndex].guides = {"x": [], "y": []};
+		for (var i = d.guides.vGuides.length - 1; i >= 0; i--) {
+			fwJSON.pages[pageIndex].guides.x[i] = d.guides.vGuides[i];
+		};
+		for (var i = d.guides.hGuides.length - 1; i >= 0; i--) {
+			fwJSON.pages[pageIndex].guides.y[i] = d.guides.hGuides[i];
+		};
 		fwJSON.pages[pageIndex].layers = [];
 
 		console.log( fwJSON.pages[pageIndex].pageName );
 		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
-	console.log( fwJSON );
 
-	// var folderURL = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
-	// var saveURL = folderURL + '/' + fwJSON.documentMeta.docName + '.json';
-	// fw.textOutputEncoding = 'utf-8';
-	// Files.createFile( saveURL, '.json', '');
-	// var fileWrite = Files.open( saveURL, true );
-	// // console.log( fwJSON );
-	// // fileWrite.writeUTF8( 'test write' );
-	// fileWrite.writeUTF8( fwJSON.toSource() );
-	// fileWrite.close();
+	// Export to JSON
+	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
+	if ( !exportDir ) {
+		alert( 'Canceled.' );
+		return false;
+	}
+	var filePath = exportDir + '/' + fwJSON.documentMeta.docName + '.json';
+	if ( Files.exists( filePath ) ) {
+		var choose = confirm( 'JSON File Exists. Delete it?' );
+		if ( choose ) {
+			Files.deleteFile( filePath );
+		} else {
+			alert( 'Canceled.' );
+			return false;
+		}
+	}
+	fw.textOutputEncoding = 'utf-8';
+	Files.createFile( filePath, '.json', '');
+	var fileWrite = Files.open( filePath, true );
+	fileWrite.writeUTF8( fwJSON.toSource() );
+	fileWrite.close();
 
-	// console.log( folderURL, saveURL );
-
-	console.log( '-------------' );
-
-	// console.log( fwJSON );
+	
 
 	function getLayerAttrs( _tgt ) {
 		// console.log( '-> start' );
@@ -77,11 +90,6 @@ var console = console || {};
 		return layerData;
 	}
 
-	var FwtoJSON = FwtoJSON || {};
-
-	// FwtoJSON.prototype.getElemsData = function ( _tgt ) {
-
-	// }
 	function getElemAttrs( _tgt ) {
 		// console.log( '-> start' );
 		var elemData = [];
@@ -99,7 +107,7 @@ var console = console || {};
 				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
 				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
-				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
+				console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
 
 				if ( 'layer group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
@@ -109,7 +117,11 @@ var console = console || {};
 						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex].pathAttributes );
 					}
 				} else if ( 'slice' == elemData[elemIndex].type ) {
-					elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
+					if ( null == _tgt[childIndex].exportOptions ) {
+						elemData[elemIndex].exportOptions = getExportOptions( d.exportOptions );
+					} else {
+						elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
+					}
 				}
 				if ( 'path' == elemData[elemIndex].type ) {
 					elemData[elemIndex].bezierPath = getPathNodes( _tgt[childIndex].contours );
@@ -203,7 +215,6 @@ var console = console || {};
 		elemData.feather = _tgt.fill.feather;
 		if ( null != _tgt.fill.gradient ) {
 			elemData.gradient = getGradientAtts( _tgt );
-			elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
 		}
 
 		return elemData;
@@ -214,14 +225,15 @@ var console = console || {};
 		var elemData = {};
 
 		elemData.gradientType = _tgt.fill.shape;
-		elemData.gradientPointX = _tgt.fillHandle1.x;
-		elemData.gradientPointY = _tgt.fillHandle1.y;
-		elemData.gradientPointX = _tgt.fillHandle2.x;
-		elemData.gradientPointY = _tgt.fillHandle2.y;
-		elemData.gradientPointX = _tgt.fillHandle3.x;
-		elemData.gradientPointY = _tgt.fillHandle3.y;
+		elemData.gradientPoint = [{}, {}, {}];
+		elemData.gradientPoint[0].x = _tgt.fillHandle1.x;
+		elemData.gradientPoint[0].y = _tgt.fillHandle1.y;
+		elemData.gradientPoint[1].x = _tgt.fillHandle2.x;
+		elemData.gradientPoint[1].y = _tgt.fillHandle2.y;
+		elemData.gradientPoint[2].x = _tgt.fillHandle3.x;
+		elemData.gradientPoint[2].y = _tgt.fillHandle3.y;
 
-		// elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
+		elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
 
 		return elemData;
 	}
