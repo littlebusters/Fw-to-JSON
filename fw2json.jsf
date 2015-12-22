@@ -10,7 +10,6 @@ var console = console || {};
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
-	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
 	var layerType = {
 		"[object RectanglePrimitive]": "rectangle",
 		"[object Text]": "text",
@@ -26,6 +25,23 @@ var console = console || {};
 	fwJSON.documentSetting.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
 	fwJSON.documentSetting.pageCount = d.pagesCount;
 	fwJSON.documentSetting.docName = d.docTitleWithoutExtension;
+
+	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
+	if ( !exportDir ) {
+		alert( 'Canceled.' );
+		return false;
+	}
+	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
+	if ( Files.exists( filePath ) ) {
+		var choose = confirm( 'JSON File Exists. Delete it?' );
+		if ( choose ) {
+			Files.deleteFile( filePath );
+		} else {
+			alert( 'Canceled.' );
+			return false;
+		}
+	}
 
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
@@ -51,21 +67,6 @@ var console = console || {};
 
 
 	// Export to JSON
-	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
-	if ( !exportDir ) {
-		alert( 'Canceled.' );
-		return false;
-	}
-	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
-	if ( Files.exists( filePath ) ) {
-		var choose = confirm( 'JSON File Exists. Delete it?' );
-		if ( choose ) {
-			Files.deleteFile( filePath );
-		} else {
-			alert( 'Canceled.' );
-			return false;
-		}
-	}
 	fw.textOutputEncoding = 'utf-8';
 	Files.createFile( filePath, '.json', '');
 	var fileWrite = Files.open( filePath, true );
@@ -145,12 +146,32 @@ var console = console || {};
 					var sel = fw.selection[0];
 					elemData[elemIndex].element = getElemAttrs( sel );
 				}
+				if ( 'bitmap' == elemData[elemIndex].type ) {
+					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
+					console.log( elemData[elemIndex].uri );
+				}
 				elemIndex++;
 			}
 		}
 		// console.log( elemData );
 
 		return elemData;
+	}
+
+	function exportBitmap( _tgt ) {
+		fw.selection = _tgt;
+		var objectName = _tgt.name;
+		if( !objectName ) objectName = 'unnamedObject' + Math.floor( ( Math.random() * 10000 ) );
+		var savePath = exportDir + '/' + objectName + '.png';
+
+		d.clipCopy();
+		fw.createDocument();
+		fw.getDocumentDOM().clipPaste( 'do not resample' );
+		fw.getDocumentDOM().backgroundColor = '#ffffff00';
+		fw.saveDocument( null, savePath );
+		fw.getDocumentDOM().close( false );
+
+		return savePath;
 	}
 
 	function getMaskAttrs( _attrs ) {
