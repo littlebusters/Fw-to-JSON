@@ -138,6 +138,13 @@ var console = console || {};
 				if ( null != _tgt[childIndex].mask && _tgt[childIndex].mask.enabled ) {
 					elemData[elemIndex].mask = getMaskAttrs( _tgt[childIndex].mask );
 				}
+				if ( 'symbol' == elemData[elemIndex].type ) {
+					fw.selection = _tgt[childIndex];
+					d.detachInstanceFromSymbol();
+					fw.selection = _tgt[childIndex];
+					var sel = fw.selection[0];
+					elemData[elemIndex].element = getElemAttrs( sel );
+				}
 				elemIndex++;
 			}
 		}
