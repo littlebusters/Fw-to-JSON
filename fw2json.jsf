@@ -72,6 +72,8 @@ var console = console || {};
 	fileWrite.writeUTF8( fwJSON.toSource() );
 	fileWrite.close();
 
+	alert( 'Exported!' );
+
 
 
 	function getLayerAttrs( _tgt ) {
@@ -133,12 +135,24 @@ var console = console || {};
 					elemData[elemIndex].text = getTextAttrs( _tgt[childIndex].textRuns );
 					elemData[elemIndex].text.autoKern = _tgt[childIndex].autoKern;
 				}
+				if ( null != _tgt[childIndex].mask && _tgt[childIndex].mask.enabled ) {
+					elemData[elemIndex].mask = getMaskAttrs( _tgt[childIndex].mask );
+				}
 				elemIndex++;
 			}
 		}
 		// console.log( elemData );
 
 		return elemData;
+	}
+
+	function getMaskAttrs( _attrs ) {
+		var attrs = {};
+
+		attrs.mode = _attrs.mode;
+		attrs.element = getElemAttrs( _attrs.element );
+
+		return attrs;
 	}
 
 	function getTextAttrs( _tgt ) {
