@@ -35,12 +35,10 @@ var console = console || {};
 	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
 	if ( Files.exists( filePath ) ) {
 		var choose = confirm( 'JSON File Exists. Delete it?' );
-		if ( choose ) {
-			Files.deleteFile( filePath );
-		} else {
-			alert( 'Canceled.' );
-			return false;
-		}
+	}
+	if ( !choose ) {
+		alert( 'Canceled.' );
+		return false;
 	}
 
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
@@ -65,12 +63,19 @@ var console = console || {};
 		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
 	};
 
+	var FwJSONstr = fwJSON.toSource();
+	var reg = new RegExp( /(\{)([\w_]+):|( )([\w_]+):/g );
+	FwJSONstr = FwJSONstr.replace( reg, '$1$3"$2$4":');
+
 
 	// Export to JSON
+	if ( choose ) {
+		Files.deleteFile( filePath );
+	}
 	fw.textOutputEncoding = 'utf-8';
 	Files.createFile( filePath, '.json', '');
 	var fileWrite = Files.open( filePath, true );
-	fileWrite.writeUTF8( fwJSON.toSource() );
+	fileWrite.writeUTF8( FwJSONstr );
 	fileWrite.close();
 
 	alert( 'Exported!' );
