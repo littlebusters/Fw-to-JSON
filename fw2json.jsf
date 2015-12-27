@@ -35,10 +35,10 @@ var console = console || {};
 	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
 	if ( Files.exists( filePath ) ) {
 		var choose = confirm( 'JSON File Exists. Delete it?' );
-	}
-	if ( !choose ) {
-		alert( 'Canceled.' );
-		return false;
+		if ( !choose ) {
+			alert( 'Canceled.' );
+			return false;
+		}
 	}
 
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
@@ -183,7 +183,8 @@ var console = console || {};
 		var attrs = {};
 
 		attrs.mode = _attrs.mode;
-		attrs.element = getElemAttrs( _attrs.element );
+		var elems = [_attrs.element];
+		attrs.element = getElemAttrs( elems );
 
 		return attrs;
 	}
