@@ -122,7 +122,7 @@ var console = console || {};
 					&& 'bitmap' != elemData[elemIndex].type
 					&& 'slice' != elemData[elemIndex].type  ) {
 					if ( null != _tgt[childIndex].pathAttributes.fill ) {
-						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex].pathAttributes );
+						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex] );
 					}
 					if ( null != _tgt[childIndex].pathAttributes.brush ) {
 						elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
@@ -154,6 +154,9 @@ var console = console || {};
 				if ( 'bitmap' == elemData[elemIndex].type ) {
 					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
 					console.log( elemData[elemIndex].uri );
+				}
+				if ( 'layer group' == elemData[elemIndex].type ) {
+					elemData[elemIndex].elements = getElemAttrs( _tgt[childIndex].elements );
 				}
 				elemIndex++;
 			}
@@ -261,11 +264,18 @@ var console = console || {};
 	function getFillAttrs( _tgt ) {
 		// console.log( '-> start' );
 		var elemData = {};
+		var tgt = _tgt.pathAttributes;
 
-		elemData.fillColor = _tgt.fillColor;
-		elemData.feather = _tgt.fill.feather;
-		if ( null != _tgt.fill.gradient ) {
-			elemData.gradient = getGradientAtts( _tgt );
+		elemData.fillColor = tgt.fillColor;
+		elemData.feather = tgt.fill.feather;
+		elemData.fillType = 'flat';
+		if ( null != tgt.fill.gradient ) {
+			elemData.gradient = getGradientAtts( tgt );
+			elemData.fillType = 'gradient';
+		}
+		if ( null != tgt.fill.pattern ) {
+			elemData.pattern = exportBitmap( _tgt );
+			elemData.fillType = 'pattern';
 		}
 
 		return elemData;
@@ -284,84 +294,36 @@ var console = console || {};
 		elemData.gradientPoint[2].x = _tgt.fillHandle3.x;
 		elemData.gradientPoint[2].y = _tgt.fillHandle3.y;
 
-		elemData.gradientStops = getGradientStops( _tgt.fill.gradient );
+		elemData.gradientNodes = getGradientStops( _tgt.fill.gradient );
 
 		return elemData;
 	}
 
 	function getGradientStops( _tgt ) {
 		// console.log( '-> start' );
-		var currentPoints = [];
-		var optimazedPoints = [];
+		var gradientNodes = {"nodes":[], "opacityNodes":[]}
 
 		for ( var i = _tgt.nodes.length - 1; i >= 0; i-- ) {
-			currentPoints.push( _tgt.nodes[i] );
+			gradientNodes.nodes.push( {
+				"isOpacityNode": _tgt.nodes[i].isOpacityNode,
+				"position": _tgt.nodes[i].position,
+				"color": _tgt.nodes[i].color
+			} );
 		};
 		for ( var i = _tgt.opacityNodes.length - 1; i >= 0; i-- ) {
-			currentPoints.push( _tgt.opacityNodes[i] );
+			gradientNodes.opacityNodes.push( {
+				"isOpacityNode": _tgt.opacityNodes[i].isOpacityNode,
+				"position": _tgt.opacityNodes[i].position,
+				"color": _tgt.opacityNodes[i].color
+			} );
 		};
 
-		// sort by gradient stop position
-		for ( var i = 0; i < currentPoints.length - 1; i++ ) {
-			for ( var j = currentPoints.length - 1; j > i; j-- ) {
-				if ( currentPoints[j - 1].position > currentPoints[j].position ) {
-					var exchenge = currentPoints[j - 1];
-					currentPoints[j - 1] = currentPoints[j];
-					currentPoints[j] = exchenge;
-				}
-			};
-		};
-
-		// get gradient attributes
-		for ( var i = 0, index = 0; i < currentPoints.length; i++ ) {
-			for ( var j = i; j < currentPoints.length; j++ ) {
-				if ( !currentPoints[i].isOpacityNode ) {
-					if ( currentPoints[j].isOpacityNode && currentPoints[i].position <= currentPoints[j].position ) {
-						optimazedPoints[index] = {};
-						optimazedPoints[index].color = currentPoints[i].color;
-						optimazedPoints[index].position = currentPoints[i].position;
-						if ( 9 == currentPoints[j].color.length ) {
-							optimazedPoints[index].opacity = getOpacityByDigit( currentPoints[j].color.slice( 7, 9 ) );
-						} else {
-							optimazedPoints[index].opacity = 1;
-						}
-						index++;
-						break;
-					}
-				} else if ( currentPoints[i - 1].position != currentPoints[i].position ) {
-					var prevColor = nextColor = optimazedPoints[index - 1].color,
-						nextPosition = 1;
-
-					for ( var k = j; k < currentPoints.length; k++ ) {
-						if ( !currentPoints[k].isOpacityNode ) {
-							nextColor = currentPoints[k].color;
-							nextPosition = currentPoints[k].position;
-						} 
-					}
-					var localPosition = ( currentPoints[i].position - optimazedPoints[index - 1].position ) / nextPosition;
-					if ( 1 == currentPoints[i].position ) {
-						localPosition = 0.5;
-					}
-
-					optimazedPoints[index] = {};
-					optimazedPoints[index].color = getGradientStopColorOnOpacitySide( prevColor, nextColor, localPosition );
-					optimazedPoints[index].position = currentPoints[i].position;
-					if ( 9 == currentPoints[i].color.length ) {
-						optimazedPoints[index].opacity = getOpacityByDigit( currentPoints[i].color.slice( 7, 9 ) );
-					} else {
-						optimazedPoints[index].opacity = 1;
-					}
-					index++;
-					break;
-				}
-			}
-		}
-
-		return optimazedPoints;
+		return gradientNodes;
 	}
 	// getGradientStops( sel[0].pathAttributes.fill.gradient );
 
 	function getBorderAttrs( _tgt ) {
+		// console.log( '-> start' );
 		var borderAttrs = {};
 
 		if ( 9 == _tgt.brushColor.length ) {
@@ -382,19 +344,6 @@ var console = console || {};
 		return borderAttrs;
 	}
 	// getBorderAttrs( sel[0].pathAttributes );
-
-	// utilities
-	function getGradientStopColorOnOpacitySide ( _prevC, _nextC, _posi ) {
-		var r = ( hex2Digit( _prevC.slice( 1, 3 ) ) - 0 + ( hex2Digit( _nextC.slice( 1, 3 ) ) - 0 ) ) * _posi;
-		var g = ( hex2Digit( _prevC.slice( 3, 5 ) ) - 0 + ( hex2Digit( _nextC.slice( 3, 5 ) ) - 0 ) ) * _posi;
-		var b = ( hex2Digit( _prevC.slice( 5, 7 ) ) - 0 + ( hex2Digit( _nextC.slice( 5, 7 ) ) - 0 ) ) * _posi;
-		
-		r = digit2Hex( r );
-		g = digit2Hex( g );
-		b = digit2Hex( b );
-
-		return '#' + r + g + b;
-	}
 
 	function floorWithDigit ( _val, _digit ) {
 		var digit = Math.pow( 10, _digit );
