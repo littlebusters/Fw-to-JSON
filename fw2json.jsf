@@ -333,11 +333,7 @@ var console = console || {};
 			borderAttrs.color = _tgt.brushColor;
 			borderAttrs.opacity = 1
 		}
-		if( 0 == _tgt.brush.numDashes ) {
-			borderAttrs.dash = false;
-		} else {
-			borderAttrs.dash = true;
-		}
+		borderAttrs.dashType = _tgt.brush.numDashes;
 		borderAttrs.dashAttr = [];
 		borderAttrs.dashAttr.push( {"dash": _tgt.brush.dashOnSize1, "gap": _tgt.brush.dashOffSize1} );
 		borderAttrs.dashAttr.push( {"dash": _tgt.brush.dashOnSize2, "gap": _tgt.brush.dashOffSize2} );
