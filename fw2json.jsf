@@ -134,6 +134,9 @@ var console = console || {};
 						elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
 					}
 				}
+				if ( 'rectangle' == elemData[elemIndex].type ) {
+					elemData[elemIndex].radius = _tgt[childIndex].roundness;
+				}
 				if ( 'path' == elemData[elemIndex].type ) {
 					elemData[elemIndex].bezierPath = getPathNodes( _tgt[childIndex].contours );
 				}
