@@ -150,9 +150,8 @@ var console = console || {};
 				if ( 'symbol' == elemData[elemIndex].type ) {
 					fw.selection = _tgt[childIndex];
 					d.detachInstanceFromSymbol();
-					fw.selection = _tgt[childIndex];
 					var sel = fw.selection[0];
-					elemData[elemIndex].element = getElemAttrs( sel );
+					elemData[elemIndex].elements = getElemAttrs( sel.elements );
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
 					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
