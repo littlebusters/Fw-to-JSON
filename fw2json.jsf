@@ -214,10 +214,10 @@ var console = console || {};
 		if ( null != _tgt.textRuns ) {
 			for ( var i = _tgt.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
-				attrs.textRuns[i].charactors = _tgt.textRuns[i].characters;
-				attrs.textRuns[i].charactors = attrs.textRuns[i].charactors.replace( '\n', '\n' );
-				attrs.textRuns[i].charactors = attrs.textRuns[i].charactors.replace( '\r', '\r' );
-				attrs.textRuns[i].charactors = attrs.textRuns[i].charactors.replace( '\t', '\t' );
+				attrs.textRuns[i].characters = _tgt.textRuns[i].characters;
+				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
+				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
+				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\t', '\t' );
 				attrs.textRuns[i].size = _tgt.textRuns[i].changedAttrs.size.slice( 0, -2 );
 				attrs.textRuns[i].face = _tgt.textRuns[i].changedAttrs.face;
 				attrs.textRuns[i].underline = _tgt.textRuns[i].changedAttrs.underline;
