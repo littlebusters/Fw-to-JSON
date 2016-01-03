@@ -67,7 +67,6 @@ var console = console || {};
 	var reg = new RegExp( /(\{)([\w_]+):|( )([\w_]+):/g );
 	FwJSONstr = FwJSONstr.replace( reg, '$1$3"$2$4":');
 
-
 	// Export to JSON
 	if ( choose ) {
 		Files.deleteFile( filePath );
@@ -103,7 +102,7 @@ var console = console || {};
 		var elemData = [];
 
 		for ( var childIndex = 0, elemIndex = 0 ; childIndex < _tgt.length; childIndex++ ) {
-			// console.log( _tgt[childIndex].toString() );
+			// console.log( _tgt[childIndex].toString(), _tgt[childIndex].name, childIndex );
 			if ( '[object Layer]' != _tgt[childIndex].toString() ) {
 				elemData[elemIndex] = {};
 				elemData[elemIndex].type = layerType[_tgt[childIndex].toString()];
@@ -211,20 +210,22 @@ var console = console || {};
 		}
 
 		attrs.textRuns = [];
-		for ( var i = _tgt.textRuns.length - 1; i >= 0; i-- ) {
-			attrs.textRuns[i] = {};
-			attrs.textRuns[i].charactors = _tgt.textRuns[i].characters;
-			attrs.textRuns[i].size = _tgt.textRuns[i].changedAttrs.size.slice( 0, -2 );
-			attrs.textRuns[i].face = _tgt.textRuns[i].changedAttrs.face;
-			attrs.textRuns[i].underline = _tgt.textRuns[i].changedAttrs.underline;
-			attrs.textRuns[i].fillColor = _tgt.textRuns[i].changedAttrs.fillColor;
-			attrs.textRuns[i].baselineShift = _tgt.textRuns[i].changedAttrs.baselineShift;
-			if ( 'percentage' == _tgt.textRuns[i].changedAttrs.leadingMode ) {
-				attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( _tgt.textRuns[i].changedAttrs.leading, 2 );
-			} else {
-				attrs.textRuns[i].leading = _tgt.initialAttrs.leading;
-			}
-		};
+		if ( null != _tgt.textRuns ) {
+			for ( var i = _tgt.textRuns.length - 1; i >= 0; i-- ) {
+				attrs.textRuns[i] = {};
+				attrs.textRuns[i].charactors = _tgt.textRuns[i].characters;
+				attrs.textRuns[i].size = _tgt.textRuns[i].changedAttrs.size.slice( 0, -2 );
+				attrs.textRuns[i].face = _tgt.textRuns[i].changedAttrs.face;
+				attrs.textRuns[i].underline = _tgt.textRuns[i].changedAttrs.underline;
+				attrs.textRuns[i].fillColor = _tgt.textRuns[i].changedAttrs.fillColor;
+				attrs.textRuns[i].baselineShift = _tgt.textRuns[i].changedAttrs.baselineShift;
+				if ( 'percentage' == _tgt.textRuns[i].changedAttrs.leadingMode ) {
+					attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( _tgt.textRuns[i].changedAttrs.leading, 2 );
+				} else {
+					attrs.textRuns[i].leading = _tgt.initialAttrs.leading;
+				}
+			};
+		}
 		
 		return attrs;
 	}
