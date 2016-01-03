@@ -10,6 +10,7 @@ var console = console || {};
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
+	var bitmapExportDirName = 'fw2json-exported/'; // need /
 	var layerType = {
 		"[object RectanglePrimitive]": "rectangle",
 		"[object Text]": "text",
@@ -171,7 +172,7 @@ var console = console || {};
 		fw.selection = _tgt;
 		var objectName = _tgt.name;
 		if( !objectName ) objectName = 'unnamedObject' + Math.floor( ( Math.random() * 10000 ) );
-		var savePath = exportDir + '/' + objectName + '.png';
+		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
 
 		d.clipCopy();
 		fw.createDocument();
