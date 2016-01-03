@@ -135,7 +135,7 @@ var console = console || {};
 					}
 				}
 				if ( 'rectangle' == elemData[elemIndex].type ) {
-					elemData[elemIndex].radius = _tgt[childIndex].roundness;
+					elemData[elemIndex] = getRectangleAttrs( _tgt[childIndex], elemData[elemIndex] );
 				}
 				if ( 'path' == elemData[elemIndex].type ) {
 					elemData[elemIndex].bezierPath = getPathNodes( _tgt[childIndex].contours );
@@ -192,6 +192,23 @@ var console = console || {};
 		attrs.element = getElemAttrs( elems );
 
 		return attrs;
+	}
+
+	function getRectangleAttrs( _attrs, _origin ) {
+		_origin.transform = { "matrix": []};
+		for ( var i = _attrs.transform.matrix.length - 1; i >= 0; i-- ) {
+			_origin.transform.matrix[i] = _attrs.transform.matrix[i];
+		};
+
+		_origin.originalSides = {};
+		_origin.originalSides['left']   = _attrs.originalSides.left;
+		_origin.originalSides['right']  = _attrs.originalSides.right;
+		_origin.originalSides['top']    = _attrs.originalSides.top;
+		_origin.originalSides['bottom'] = _attrs.originalSides.bottom;
+
+		_origin.radius = _attrs.roundness;
+
+		return _origin;
 	}
 
 	function getTextAttrs( _tgt ) {
