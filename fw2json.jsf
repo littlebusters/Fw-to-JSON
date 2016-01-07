@@ -41,6 +41,7 @@ var console = console || {};
 			return false;
 		}
 	}
+	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
 
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
