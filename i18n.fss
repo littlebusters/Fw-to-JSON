@@ -1,0 +1,5 @@
+var i18n = {
+	'ja-jp': {
+		'ドロップシャドウ': 'Drop Shadow';
+	}
+}

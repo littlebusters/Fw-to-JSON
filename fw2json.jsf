@@ -7,6 +7,11 @@
 var console = console || {};
 (function()
 {
+	try {
+		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/i18n.fss' );
+	} catch( e ) {
+		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
+	}
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
