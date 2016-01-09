@@ -156,10 +156,14 @@ var console = console || {};
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
 					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
-					console.log( elemData[elemIndex].uri );
+					// console.log( elemData[elemIndex].uri );
 				}
 				if ( 'layer group' == elemData[elemIndex].type ) {
 					elemData[elemIndex].elements = getElemAttrs( _tgt[childIndex].elements );
+				}
+				if ( null != _tgt[childIndex].effectList && 0 != _tgt[childIndex].effectList.length ) {
+					elemData[elemIndex].effectList = getEffect( _tgt[childIndex].effectList );
+					// console.log( elemData[elemIndex].effectList );
 				}
 				elemIndex++;
 			}
@@ -167,6 +171,13 @@ var console = console || {};
 		// console.log( elemData );
 
 		return elemData;
+	}
+
+	function getEffect( _attrs ) {
+		var effects = {};
+		effects = ( new Function( 'return ' + _attrs.javascriptString ) )();
+
+		return effects;
 	}
 
 	function exportBitmap( _tgt ) {
