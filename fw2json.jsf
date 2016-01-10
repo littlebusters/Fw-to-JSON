@@ -98,7 +98,12 @@ var console = console || {};
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( layerIndex );
 
 			// console.log( layerData[layerIndex].layerName );
-			layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
+			if ( _tgt[layerIndex].elems.length ) {
+				layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
+				layerData[layerIndex].hasChildren = true;
+			} else {
+				layerData[layerIndex].hasChildren = false;
+			}
 		}
 
 		return layerData;
