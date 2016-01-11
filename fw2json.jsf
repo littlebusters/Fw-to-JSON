@@ -15,7 +15,6 @@ var console = console || {};
 	var d = fw.getDocumentDOM();
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
 	var pageSetter = d.getPageSetter();
-	var bitmapExportDirName = 'fw2json-exported/'; // need /
 	var layerType = {
 		"[object RectanglePrimitive]": "rectangle",
 		"[object Text]": "text",
@@ -46,6 +45,7 @@ var console = console || {};
 			return false;
 		}
 	}
+	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
 
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
