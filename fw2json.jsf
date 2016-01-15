@@ -109,6 +109,25 @@ var console = console || {};
 		return layerData;
 	}
 
+	function getChildLayerAttrs( _tgt ) {
+		console.log( '-> start' );
+		var layerData = {};
+
+		layerData.name = _tgt.name;
+		layerData.type = layerType[_tgt.toString()];
+		layerData.parentLayerNum = d.getParentLayerNum( documentLayerIndex++ );
+
+		console.log( layerData.name );
+		if ( _tgt.elems.length ) {
+			layerData.elems = getElemAttrs( _tgt.elems );
+			layerData.hasChildren = true;
+		} else {
+			layerData.hasChildren = false;
+		}
+
+		return layerData;
+	}
+
 	function getElemAttrs( _tgt ) {
 		// console.log( '-> start' );
 		var elemData = [];
