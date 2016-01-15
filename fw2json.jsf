@@ -19,7 +19,7 @@ var console = console || {};
 		"[object RectanglePrimitive]": "rectangle",
 		"[object Text]": "text",
 		"[object Path]": "path",
-		"[object Group]": "layer group",
+		"[object Group]": "group",
 		"[object Instance]": "symbol",
 		"[object SliceHotspot]": "slice",
 		"[object Layer]": "layer",
@@ -29,7 +29,7 @@ var console = console || {};
 	fwJSON.documentSetting.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
 	fwJSON.documentSetting.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
 	fwJSON.documentSetting.pageCount = d.pagesCount;
-	fwJSON.documentSetting.docName = d.docTitleWithoutExtension;
+	fwJSON.documentSetting.docName = d.docTitleWithoutExtension || 'Untitled Document';
 
 	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
 	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
@@ -48,6 +48,7 @@ var console = console || {};
 	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
 
+	var documentLayerIndex = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
 		d = fw.getDocumentDOM();
@@ -67,7 +68,7 @@ var console = console || {};
 		fwJSON.pages[pageIndex].layers = [];
 
 		// console.log( fwJSON.pages[pageIndex].pageName );
-		fwJSON.pages[pageIndex].layers = getLayerAttrs( d.layers );
+		fwJSON.pages[pageIndex].topLayers = getLayerAttrs( d.topLayers );
 	};
 
 	var FwJSONstr = fwJSON.toSource();
@@ -89,15 +90,16 @@ var console = console || {};
 
 
 	function getLayerAttrs( _tgt ) {
-		// console.log( '-> start' );
+		// console.log( '-> start', _tgt.length );
 		var layerData = [];
 
 		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
 			layerData[layerIndex] = {};
-			layerData[layerIndex].layerName = _tgt[layerIndex].name;
-			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( layerIndex );
+			layerData[layerIndex].name = _tgt[layerIndex].name;
+			layerData[layerIndex].type = layerType[_tgt[layerIndex].toString()];
+			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( documentLayerIndex++ );
 
-			// console.log( layerData[layerIndex].layerName );
+			// console.log( layerData[layerIndex].name );
 			if ( _tgt[layerIndex].elems.length ) {
 				layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
 				layerData[layerIndex].hasChildren = true;
@@ -147,7 +149,7 @@ var console = console || {};
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
 				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
 
-				if ( 'layer group' != elemData[elemIndex].type 
+				if ( 'group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
 					&& 'bitmap' != elemData[elemIndex].type
 					&& 'slice' != elemData[elemIndex].type  ) {
@@ -187,7 +189,7 @@ var console = console || {};
 					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
 					// console.log( elemData[elemIndex].uri );
 				}
-				if ( 'layer group' == elemData[elemIndex].type ) {
+				if ( 'group' == elemData[elemIndex].type ) {
 					elemData[elemIndex].elements = getElemAttrs( _tgt[childIndex].elements );
 				}
 				if ( null != _tgt[childIndex].effectList && 0 != _tgt[childIndex].effectList.length ) {
@@ -195,6 +197,11 @@ var console = console || {};
 					// console.log( elemData[elemIndex].effectList );
 				}
 				elemIndex++;
+			} else {
+				console.log( _tgt[childIndex].name );
+				elemData[elemIndex] = getChildLayerAttrs( _tgt[childIndex] );
+				elemIndex++;
+				console.log( 'get Layer F' );
 			}
 		}
 		// console.log( elemData );
