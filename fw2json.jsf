@@ -161,6 +161,7 @@ var console = console || {};
 						elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
 					}
 				} else if ( 'slice' == elemData[elemIndex].type ) {
+					elemData[elemIndex].baseName = _tgt[childIndex].baseName || elemData[elemIndex].type;
 					if ( null == _tgt[childIndex].exportOptions ) {
 						elemData[elemIndex].exportOptions = getExportOptions( d.exportOptions );
 					} else {
