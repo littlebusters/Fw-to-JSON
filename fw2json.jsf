@@ -217,9 +217,9 @@ var console = console || {};
 		return elemData;
 	}
 
-	function getEffect( _attrs ) {
+	function getEffect( attrs ) {
 		var effects = {};
-		effects = ( new Function( 'return ' + _attrs.javascriptString ) )();
+		effects = getJavaScriptString( attrs.javascriptString );
 
 		return effects;
 	}
@@ -340,9 +340,13 @@ var console = console || {};
 		return attrs;
 	}
 
+	function getJavaScriptString ( obj ) {
+		return ( new Function( 'return ' + obj.javascriptString ) )();
+	}
+
 	function getPathAttributes( obj ) {
 		var attrs = {};
-		attrs = ( new Function( 'return ' + obj.javascriptString ) )();
+		attrs = getJavaScriptString( obj.pathAttributes );
 
 		// fill attributes
 		attrs.fillType = null;
