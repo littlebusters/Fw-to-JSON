@@ -148,6 +148,11 @@ var console = console || {};
 				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
 				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
+				elemData[elemIndex].locked = _tgt[childIndex].locked;
+				elemData[elemIndex].pixelRect = [];
+				for ( var angle in _tgt[childIndex].pixelRect ) {
+					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
+				}
 				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
 
 				if ( 'group' != elemData[elemIndex].type 
