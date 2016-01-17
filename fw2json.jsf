@@ -159,12 +159,13 @@ var console = console || {};
 					&& 'symbol' != elemData[elemIndex].type
 					&& 'bitmap' != elemData[elemIndex].type
 					&& 'slice' != elemData[elemIndex].type  ) {
-					if ( null != _tgt[childIndex].pathAttributes.fill ) {
-						elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex] );
-					}
-					if ( null != _tgt[childIndex].pathAttributes.brush ) {
-						elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
-					}
+					elemData[elemIndex].pathAttributes = getPathAttributes( _tgt[childIndex] );
+					// if ( null != _tgt[childIndex].pathAttributes.fill ) {
+					//	elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex] );
+					// }
+					// if ( null != _tgt[childIndex].pathAttributes.brush ) {
+					//	elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
+					// }
 				} else if ( 'slice' == elemData[elemIndex].type ) {
 					elemData[elemIndex].baseName = _tgt[childIndex].baseName || elemData[elemIndex].type;
 					if ( null == _tgt[childIndex].exportOptions ) {
@@ -335,6 +336,24 @@ var console = console || {};
 
 		attrs.exportFormat = _tgt.exportFormat;
 		attrs.jpegQuality = _tgt.jpegQuality;
+
+		return attrs;
+	}
+
+	function getPathAttributes( obj ) {
+		var attrs = {};
+		attrs = ( new Function( 'return ' + obj.javascriptString ) )();
+
+		// fill attributes
+		attrs.fillType = null;
+		if ( null != attrs.fill ) {
+			attrs.fillType = 'flat';
+			if ( null != attrs.fill.gradient ) attrs.fillType = 'gradient';
+			if ( null != attrs.fill.pattern ) {
+				attrs.fill.pattern.patternURI = exportBitmap( obj );
+				attrs.fillType = 'pattern';
+			}
+		}
 
 		return attrs;
 	}
