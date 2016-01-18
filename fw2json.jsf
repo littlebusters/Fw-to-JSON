@@ -352,7 +352,10 @@ var console = console || {};
 		attrs.fillType = null;
 		if ( null != attrs.fill ) {
 			attrs.fillType = 'flat';
-			if ( null != attrs.fill.gradient ) attrs.fillType = 'gradient';
+			if ( null != attrs.fill.gradient ) {
+				attrs.fillType = 'gradient';
+				attrs.gradient.gradientType = attrs.fill.shape;
+			}
 			if ( null != attrs.fill.pattern ) {
 				attrs.fill.pattern.patternURI = exportBitmap( obj );
 				attrs.fillType = 'pattern';
