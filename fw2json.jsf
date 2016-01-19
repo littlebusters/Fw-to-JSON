@@ -335,10 +335,6 @@ var console = console || {};
 		return attrs;
 	}
 
-	function getJavaScriptString ( obj ) {
-		return ( new Function( 'return ' + obj.javascriptString ) )();
-	}
-
 	function getPathAttributes( obj ) {
 		var attrs = {};
 		attrs = getJavaScriptString( obj.pathAttributes );
@@ -360,29 +356,11 @@ var console = console || {};
 		return attrs;
 	}
 
-	function getGradientStops( _tgt ) {
-		// console.log( '-> start' );
-		var gradientNodes = {"nodes":[], "opacityNodes":[]}
 
-		for ( var i = _tgt.nodes.length - 1; i >= 0; i-- ) {
-			gradientNodes.nodes.push( {
-				"isOpacityNode": _tgt.nodes[i].isOpacityNode,
-				"position": _tgt.nodes[i].position,
-				"color": _tgt.nodes[i].color
-			} );
-		};
-		for ( var i = _tgt.opacityNodes.length - 1; i >= 0; i-- ) {
-			gradientNodes.opacityNodes.push( {
-				"isOpacityNode": _tgt.opacityNodes[i].isOpacityNode,
-				"position": _tgt.opacityNodes[i].position,
-				"color": _tgt.opacityNodes[i].color
-			} );
-		};
-
-		return gradientNodes;
+	// utilities
+	function getJavaScriptString ( obj ) {
+		return ( new Function( 'return ' + obj.javascriptString ) )();
 	}
-	// getGradientStops( sel[0].pathAttributes.fill.gradient );
-
 	function floorWithDigit ( _val, _digit ) {
 		var digit = Math.pow( 10, _digit );
 		var val = _val * digit;
