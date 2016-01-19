@@ -176,8 +176,7 @@ var console = console || {};
 					elemData[elemIndex].bezierPath = getPathNodes( _tgt[childIndex].contours );
 				}
 				if ( 'text' == elemData[elemIndex].type ) {
-					elemData[elemIndex].text = getTextAttrs( _tgt[childIndex].textRuns );
-					elemData[elemIndex].text.autoKern = _tgt[childIndex].autoKern;
+					elemData[elemIndex] = getTextAttrs( _tgt[childIndex], elemData[elemIndex] );
 				}
 				if ( null != _tgt[childIndex].mask && _tgt[childIndex].mask.enabled ) {
 					elemData[elemIndex].mask = getMaskAttrs( _tgt[childIndex].mask );
@@ -261,39 +260,55 @@ var console = console || {};
 		return _origin;
 	}
 
-	function getTextAttrs( _tgt ) {
+	function getTextAttrs( obj, basics ) {
 		// console.log( '-> start' );
-		var attrs = {};
+		var attrs = basics;
 
-		attrs.fontFace = _tgt.initialAttrs.face;
-		attrs.fontSize = _tgt.initialAttrs.size.slice( 0, -2 );
-		attrs.alignment = _tgt.initialAttrs.alignment;
-		attrs.underline = _tgt.initialAttrs.underline;
-		attrs.fillColor = _tgt.initialAttrs.fillColor;
-		attrs.baselineShift = _tgt.initialAttrs.baselineShift;
-		if ( 'percentage' == _tgt.initialAttrs.leadingMode ) {
-			attrs.leading = attrs.fontSize * floorWithDigit( _tgt.initialAttrs.leading, 2 );
+		attrs.rawHeight     = obj.rawHeight;
+		attrs.rawWidth      = obj.rawWidth;
+		attrs.rawTop        = obj.rawTop;
+		attrs.rawLeft       = obj.rawLeft;
+		attrs.autoExpand    = obj.autoExpand;
+		attrs.antiAliasMode = obj.antiAliasMode;
+		attrs.antiAliased   = obj.antiAliased;
+		attrs.autoKern      = obj.autoKern;
+		attrs.orientation   = obj.orientation;
+		attrs.textChars     = obj.textChars;
+
+		attrs.fontFace = obj.textRuns.initialAttrs.face;
+		attrs.fontSize = obj.textRuns.initialAttrs.size.slice( 0, -2 );
+		attrs.alignment = obj.textRuns.initialAttrs.alignment;
+		attrs.underline = obj.textRuns.initialAttrs.underline;
+		attrs.fillColor = obj.textRuns.initialAttrs.fillColor;
+		attrs.baselineShift = obj.textRuns.initialAttrs.baselineShift;
+		attrs.paragraphIndent        = obj.textRuns.initialAttrs.paragraphIndent;
+		attrs.paragraphSpacingBefore = obj.textRuns.initialAttrs.paragraphSpacingBefore;
+		attrs.paragraphSpacingAfter  = obj.textRuns.initialAttrs.paragraphSpacingAfter;
+		if ( 'percentage' == obj.textRuns.initialAttrs.leadingMode ) {
+			attrs.leading = attrs.fontSize * floorWithDigit( obj.textRuns.initialAttrs.leading, 2 );
 		} else {
-			attrs.leading = _tgt.initialAttrs.leading;
+			attrs.leading = obj.textRuns.initialAttrs.leading;
 		}
 
 		attrs.textRuns = [];
-		if ( null != _tgt.textRuns ) {
-			for ( var i = _tgt.textRuns.length - 1; i >= 0; i-- ) {
+		if ( null != obj.textRuns.textRuns ) {
+			for ( var i = obj.textRuns.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
-				attrs.textRuns[i].characters = _tgt.textRuns[i].characters;
+				attrs.textRuns[i].characters = obj.textRuns.textRuns[i].characters;
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\t', '\t' );
-				attrs.textRuns[i].size = _tgt.textRuns[i].changedAttrs.size.slice( 0, -2 );
-				attrs.textRuns[i].face = _tgt.textRuns[i].changedAttrs.face;
-				attrs.textRuns[i].underline = _tgt.textRuns[i].changedAttrs.underline;
-				attrs.textRuns[i].fillColor = _tgt.textRuns[i].changedAttrs.fillColor;
-				attrs.textRuns[i].baselineShift = _tgt.textRuns[i].changedAttrs.baselineShift;
-				if ( 'percentage' == _tgt.textRuns[i].changedAttrs.leadingMode ) {
-					attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( _tgt.textRuns[i].changedAttrs.leading, 2 );
+				attrs.textRuns[i].size = obj.textRuns.textRuns[i].changedAttrs.size.slice( 0, -2 );
+				attrs.textRuns[i].face = obj.textRuns.textRuns[i].changedAttrs.face;
+				attrs.textRuns[i].bold = obj.textRuns.textRuns[i].changedAttrs.bold;
+				attrs.textRuns[i].italic = obj.textRuns.textRuns[i].changedAttrs.italic;
+				attrs.textRuns[i].underline = obj.textRuns.textRuns[i].changedAttrs.underline;
+				attrs.textRuns[i].fillColor = obj.textRuns.textRuns[i].changedAttrs.fillColor;
+				attrs.textRuns[i].baselineShift = obj.textRuns.textRuns[i].changedAttrs.baselineShift;
+				if ( 'percentage' == obj.textRuns.textRuns[i].changedAttrs.leadingMode ) {
+					attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( obj.textRuns.textRuns[i].changedAttrs.leading, 2 );
 				} else {
-					attrs.textRuns[i].leading = _tgt.initialAttrs.leading;
+					attrs.textRuns[i].leading = obj.textRuns.initialAttrs.leading;
 				}
 			};
 		}
