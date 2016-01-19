@@ -302,22 +302,22 @@ var console = console || {};
 	}
 	//getTextAttrs( sel[0].textRuns );
 
-	function getPathNodes( _tgt ) {
+	function getPathNodes( obj ) {
 		// console.log( '-> start' );
 		var attrs = [];
 
-		for ( var i = _tgt.length - 1; i >= 0; i-- ) {
+		for ( var i = obj.length - 1; i >= 0; i-- ) {
 			attrs[i] = {};
-			attrs[i].isClosed = _tgt[i].isClosed;
+			attrs[i].isClosed = obj[i].isClosed;
 			attrs[i].nodes = [];
-			for ( var j = _tgt[i].nodes.length - 1; j >= 0; j-- ) {
-				attrs[i].nodes[j] = { "isCurvePoint": _tgt[i].nodes[j].isCurvePoint };
-				attrs[i].nodes[j].ancherPointX = _tgt[i].nodes[j].x;
-				attrs[i].nodes[j].ancherPointY = _tgt[i].nodes[j].y;
-				attrs[i].nodes[j].succPointX = _tgt[i].nodes[j].succX;
-				attrs[i].nodes[j].succPointY = _tgt[i].nodes[j].succY;
-				attrs[i].nodes[j].predPointX = _tgt[i].nodes[j].predX;
-				attrs[i].nodes[j].predPointY = _tgt[i].nodes[j].predY;
+			for ( var j = obj[i].nodes.length - 1; j >= 0; j-- ) {
+				attrs[i].nodes[j] = { "isCurvePoint": obj[i].nodes[j].isCurvePoint };
+				attrs[i].nodes[j].x = obj[i].nodes[j].x;
+				attrs[i].nodes[j].y = obj[i].nodes[j].y;
+				attrs[i].nodes[j].succX = obj[i].nodes[j].succX;
+				attrs[i].nodes[j].succY = obj[i].nodes[j].succY;
+				attrs[i].nodes[j].predX = obj[i].nodes[j].predX;
+				attrs[i].nodes[j].predY = obj[i].nodes[j].predY;
 			};
 		};
 
