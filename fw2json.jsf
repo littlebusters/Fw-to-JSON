@@ -158,14 +158,9 @@ var console = console || {};
 				if ( 'group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
 					&& 'bitmap' != elemData[elemIndex].type
-					&& 'slice' != elemData[elemIndex].type  ) {
+					&& 'slice' != elemData[elemIndex].type  ) 
+				{
 					elemData[elemIndex].pathAttributes = getPathAttributes( _tgt[childIndex] );
-					// if ( null != _tgt[childIndex].pathAttributes.fill ) {
-					//	elemData[elemIndex].fill = getFillAttrs( _tgt[childIndex] );
-					// }
-					// if ( null != _tgt[childIndex].pathAttributes.brush ) {
-					//	elemData[elemIndex].border = getBorderAttrs( _tgt[childIndex].pathAttributes );
-					// }
 				} else if ( 'slice' == elemData[elemIndex].type ) {
 					elemData[elemIndex].baseName = _tgt[childIndex].baseName || elemData[elemIndex].type;
 					if ( null == _tgt[childIndex].exportOptions ) {
@@ -365,44 +360,6 @@ var console = console || {};
 		return attrs;
 	}
 
-	function getFillAttrs( _tgt ) {
-		// console.log( '-> start' );
-		var elemData = {};
-		var tgt = _tgt.pathAttributes;
-
-		elemData.fillColor = tgt.fillColor;
-		elemData.feather = tgt.fill.feather;
-		elemData.fillType = 'flat';
-		if ( null != tgt.fill.gradient ) {
-			elemData.gradient = getGradientAtts( tgt );
-			elemData.fillType = 'gradient';
-		}
-		if ( null != tgt.fill.pattern ) {
-			elemData.pattern = exportBitmap( _tgt );
-			elemData.fillType = 'pattern';
-		}
-
-		return elemData;
-	}
-
-	function getGradientAtts( _tgt ) {
-		// console.log( '-> start' );
-		var elemData = {};
-
-		elemData.gradientType = _tgt.fill.shape;
-		elemData.gradientPoint = [{}, {}, {}];
-		elemData.gradientPoint[0].x = _tgt.fillHandle1.x;
-		elemData.gradientPoint[0].y = _tgt.fillHandle1.y;
-		elemData.gradientPoint[1].x = _tgt.fillHandle2.x;
-		elemData.gradientPoint[1].y = _tgt.fillHandle2.y;
-		elemData.gradientPoint[2].x = _tgt.fillHandle3.x;
-		elemData.gradientPoint[2].y = _tgt.fillHandle3.y;
-
-		elemData.gradientNodes = getGradientStops( _tgt.fill.gradient );
-
-		return elemData;
-	}
-
 	function getGradientStops( _tgt ) {
 		// console.log( '-> start' );
 		var gradientNodes = {"nodes":[], "opacityNodes":[]}
@@ -425,30 +382,6 @@ var console = console || {};
 		return gradientNodes;
 	}
 	// getGradientStops( sel[0].pathAttributes.fill.gradient );
-
-	function getBorderAttrs( _tgt ) {
-		// console.log( '-> start' );
-		var borderAttrs = {};
-
-		if ( 9 == _tgt.brushColor.length ) {
-			borderAttrs.color = _tgt.brushColor.slice( 0, 7 );
-			borderAttrs.opacity = getOpacityByDigit( _tgt.brushColor.slice( 7, 9 ) );
-		} else {
-			borderAttrs.color = _tgt.brushColor;
-			borderAttrs.opacity = 1
-		}
-		borderAttrs.dashType = _tgt.brush.numDashes;
-		borderAttrs.dashAttr = [];
-		borderAttrs.dashAttr.push( {"dash": _tgt.brush.dashOnSize1, "gap": _tgt.brush.dashOffSize1} );
-		borderAttrs.dashAttr.push( {"dash": _tgt.brush.dashOnSize2, "gap": _tgt.brush.dashOffSize2} );
-		borderAttrs.dashAttr.push( {"dash": _tgt.brush.dashOnSize3, "gap": _tgt.brush.dashOffSize3} );
-		borderAttrs.edge = _tgt.brush.shape;
-		borderAttrs.position = _tgt.brushPlacement;
-		borderAttrs.thickness = _tgt.brush.diameter;
-
-		return borderAttrs;
-	}
-	// getBorderAttrs( sel[0].pathAttributes );
 
 	function floorWithDigit ( _val, _digit ) {
 		var digit = Math.pow( 10, _digit );
