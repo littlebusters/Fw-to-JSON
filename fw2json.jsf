@@ -149,7 +149,7 @@ var console = console || {};
 				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
 				elemData[elemIndex].visible = _tgt[childIndex].visible;
 				elemData[elemIndex].locked = _tgt[childIndex].locked;
-				elemData[elemIndex].pixelRect = [];
+				elemData[elemIndex].pixelRect = {};
 				for ( var angle in _tgt[childIndex].pixelRect ) {
 					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
 				}
