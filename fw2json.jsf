@@ -49,10 +49,12 @@ var console = console || {};
 	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
 
-	var documentLayerIndex = 0;
+	var sceneLayerIndex = 0;
+	var frameIndex = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
 		d = fw.getDocumentDOM();
+		sceneLayerIndex = 0;
 
 		fwJSON.pages[pageIndex] = {};
 		fwJSON.pages[pageIndex].pageName = d.pageName;
@@ -60,16 +62,21 @@ var console = console || {};
 		fwJSON.pages[pageIndex].width = d.width;
 		fwJSON.pages[pageIndex].height = d.height;
 		fwJSON.pages[pageIndex].guides = {"x": [], "y": []};
+		console.log( fwJSON.pages[pageIndex].pageName );
 		for (var i = d.guides.vGuides.length - 1; i >= 0; i--) {
 			fwJSON.pages[pageIndex].guides.x[i] = d.guides.vGuides[i];
 		};
 		for (var i = d.guides.hGuides.length - 1; i >= 0; i--) {
 			fwJSON.pages[pageIndex].guides.y[i] = d.guides.hGuides[i];
 		};
-		fwJSON.pages[pageIndex].layers = [];
 
-		// console.log( fwJSON.pages[pageIndex].pageName );
-		fwJSON.pages[pageIndex].topLayers = getLayerAttrs( d.topLayers );
+		fwJSON.pages[pageIndex].frames = [];
+		for ( frameIndex = 0; frameIndex < d.frames.length; frameIndex++ ) {
+			sceneLayerIndex = 0;
+			console.log( 'Frame: ', frameIndex + 1 );
+			fwJSON.pages[pageIndex].frames[frameIndex] = {};
+			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.topLayers );
+		};
 	};
 
 	var FwJSONstr = fwJSON.toSource();
@@ -91,14 +98,16 @@ var console = console || {};
 
 
 	function getLayerAttrs( _tgt ) {
-		// console.log( '-> start', _tgt.length );
+		// console.log( '-> start', _tgt.length, 'F:', frameIndex, 'L:', sceneLayerIndex );
 		var layerData = [];
 
 		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
 			layerData[layerIndex] = {};
 			layerData[layerIndex].name = _tgt[layerIndex].name;
 			layerData[layerIndex].type = layerType[_tgt[layerIndex].toString()];
-			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( documentLayerIndex++ );
+			layerData[layerIndex].locked = d.frames[frameIndex].layers[sceneLayerIndex].locked;
+			layerData[layerIndex].visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
+			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 			// console.log( layerData[layerIndex].name );
 			if ( _tgt[layerIndex].elems.length ) {
@@ -113,12 +122,12 @@ var console = console || {};
 	}
 
 	function getChildLayerAttrs( _tgt ) {
-		console.log( '-> start' );
+		// console.log( '-> start', 'F:', frameIndex, 'L:', sceneLayerIndex );
 		var layerData = {};
 
 		layerData.name = _tgt.name;
 		layerData.type = layerType[_tgt.toString()];
-		layerData.parentLayerNum = d.getParentLayerNum( documentLayerIndex++ );
+		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 		console.log( layerData.name );
 		if ( _tgt.elems.length ) {
@@ -153,7 +162,7 @@ var console = console || {};
 				for ( var angle in _tgt[childIndex].pixelRect ) {
 					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
 				}
-				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/ gat basics--' );
+				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
 
 				if ( 'group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
