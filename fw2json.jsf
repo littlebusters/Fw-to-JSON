@@ -162,7 +162,7 @@ var console = console || {};
 				for ( var angle in _tgt[childIndex].pixelRect ) {
 					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
 				}
-				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
+				console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
 
 				if ( 'group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
@@ -222,14 +222,19 @@ var console = console || {};
 
 	function getEffect( attrs ) {
 		var effects = {};
-		effects = getJavaScriptString( attrs.javascriptString );
+		effects = getJavaScriptString( attrs );
 
 		return effects;
 	}
 
 	function exportBitmap( _tgt ) {
 		fw.selection = _tgt;
-		var objectName = ( _tgt.name ) ? _tgt.name + bitmapCounter++ : 'unnamedObject' + bitmapCounter++;
+		_tgt.visible = true;
+		if ( '[object Text]' == _tgt.toString() ) {
+			var objectName = _tgt.textChars + bitmapCounter++;
+		} else {
+			var objectName = ( _tgt.name ) ? _tgt.name + bitmapCounter++ : 'unnamedObject' + bitmapCounter++;
+		}
 		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
 
 		d.clipCopy();
