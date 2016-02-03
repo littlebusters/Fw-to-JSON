@@ -99,22 +99,22 @@ var console = console || {};
 
 
 
-	function getLayerAttrs( _tgt ) {
-		// console.log( '-> start', _tgt.length, 'F:', frameIndex, 'L:', sceneLayerIndex );
+	function getLayerAttrs( topLayers ) {
+		// console.log( '-> start', topLayers.length, 'F:', frameIndex, 'L:', sceneLayerIndex );
 		var layerData = [];
 
-		for ( var layerIndex = 0; layerIndex < _tgt.length; layerIndex++ ) {
+		for ( var layerIndex = 0; layerIndex < topLayers.length; layerIndex++ ) {
 			layerData[layerIndex] = {};
-			layerData[layerIndex].name = _tgt[layerIndex].name;
-			layerData[layerIndex].type = layerType[_tgt[layerIndex].toString()];
+			layerData[layerIndex].name = topLayers[layerIndex].name;
+			layerData[layerIndex].type = layerType[topLayers[layerIndex].toString()];
 			layerData[layerIndex].locked = d.frames[frameIndex].layers[sceneLayerIndex].locked;
 			layerData[layerIndex].visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 			// console.log( layerData[layerIndex].name );
-			if ( _tgt[layerIndex].elements.length ) {
-				// layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
-				layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elements );
+			if ( topLayers[layerIndex].elements.length ) {
+				// layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elems );
+				layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elements );
 				layerData[layerIndex].hasChildren = true;
 			} else {
 				layerData[layerIndex].hasChildren = false;
@@ -124,18 +124,18 @@ var console = console || {};
 		return layerData;
 	}
 
-	function getChildLayerAttrs( _tgt ) {
+	function getChildLayerAttrs( layer ) {
 		// console.log( '-> start', 'F:', frameIndex, 'L:', sceneLayerIndex );
 		var layerData = {};
 
-		layerData.name = _tgt.name;
-		layerData.type = layerType[_tgt.toString()];
+		layerData.name = layer.name;
+		layerData.type = layerType[layer.toString()];
 		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 		console.log( layerData.name );
-		if ( _tgt.elements.length ) {
-			// layerData.elems = getElemAttrs( _tgt.elems );
-			layerData.elems = getElemAttrs( _tgt.elements );
+		if ( layer.elements.length ) {
+			// layerData.elems = getElemAttrs( layer.elems );
+			layerData.elems = getElemAttrs( layer.elements );
 			layerData.hasChildren = true;
 		} else {
 			layerData.hasChildren = false;
@@ -144,27 +144,27 @@ var console = console || {};
 		return layerData;
 	}
 
-	function getElemAttrs( _tgt ) {
+	function getElemAttrs( elements ) {
 		// console.log( '-> start' );
 		var elemData = [];
 
-		for ( var childIndex = 0, elemIndex = 0 ; childIndex < _tgt.length; childIndex++ ) {
-			// console.log( _tgt[childIndex].toString(), _tgt[childIndex].name, childIndex );
-			if ( '[object Layer]' != _tgt[childIndex].toString() ) {
+		for ( var childIndex = 0, elemIndex = 0 ; childIndex < elements.length; childIndex++ ) {
+			// console.log( elements[childIndex].toString(), elements[childIndex].name, childIndex );
+			if ( '[object Layer]' != elements[childIndex].toString() ) {
 				elemData[elemIndex] = {};
-				elemData[elemIndex].type = layerType[_tgt[childIndex].toString()];
-				elemData[elemIndex].name = _tgt[childIndex].name || elemData[elemIndex].type;
-				elemData[elemIndex].width = _tgt[childIndex].width;
-				elemData[elemIndex].height = _tgt[childIndex].height;
-				elemData[elemIndex].top = _tgt[childIndex].top;
-				elemData[elemIndex].left = _tgt[childIndex].left;
-				elemData[elemIndex].blendMode = _tgt[childIndex].blendMode;
-				elemData[elemIndex].opacity = _tgt[childIndex].opacity;
-				elemData[elemIndex].visible = _tgt[childIndex].visible;
-				elemData[elemIndex].locked = _tgt[childIndex].locked;
+				elemData[elemIndex].type = layerType[elements[childIndex].toString()];
+				elemData[elemIndex].name = elements[childIndex].name || elemData[elemIndex].type;
+				elemData[elemIndex].width = elements[childIndex].width;
+				elemData[elemIndex].height = elements[childIndex].height;
+				elemData[elemIndex].top = elements[childIndex].top;
+				elemData[elemIndex].left = elements[childIndex].left;
+				elemData[elemIndex].blendMode = elements[childIndex].blendMode;
+				elemData[elemIndex].opacity = elements[childIndex].opacity;
+				elemData[elemIndex].visible = elements[childIndex].visible;
+				elemData[elemIndex].locked = elements[childIndex].locked;
 				elemData[elemIndex].pixelRect = {};
-				for ( var angle in _tgt[childIndex].pixelRect ) {
-					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
+				for ( var angle in elements[childIndex].pixelRect ) {
+					elemData[elemIndex].pixelRect[angle] = elements[childIndex].pixelRect[angle];
 				}
 				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
 
@@ -173,49 +173,49 @@ var console = console || {};
 					&& 'bitmap' != elemData[elemIndex].type
 					&& 'slice' != elemData[elemIndex].type  ) 
 				{
-					elemData[elemIndex].pathAttributes = getPathAttributes( _tgt[childIndex] );
+					elemData[elemIndex].pathAttributes = getPathAttributes( elements[childIndex] );
 				} else if ( 'slice' == elemData[elemIndex].type ) {
-					elemData[elemIndex].baseName = _tgt[childIndex].baseName || elemData[elemIndex].type;
-					if ( null == _tgt[childIndex].exportOptions ) {
+					elemData[elemIndex].baseName = elements[childIndex].baseName || elemData[elemIndex].type;
+					if ( null == elements[childIndex].exportOptions ) {
 						elemData[elemIndex].exportOptions = getExportOptions( d.exportOptions );
 					} else {
-						elemData[elemIndex].exportOptions = getExportOptions( _tgt[childIndex].exportOptions );
+						elemData[elemIndex].exportOptions = getExportOptions( elements[childIndex].exportOptions );
 					}
 				}
 				if ( 'rectangle' == elemData[elemIndex].type ) {
-					elemData[elemIndex] = getRectangleAttrs( _tgt[childIndex], elemData[elemIndex] );
+					elemData[elemIndex] = getRectangleAttrs( elements[childIndex], elemData[elemIndex] );
 				}
 				if ( 'path' == elemData[elemIndex].type ) {
-					elemData[elemIndex].bezierPath = getPathNodes( _tgt[childIndex].contours );
+					elemData[elemIndex].bezierPath = getPathNodes( elements[childIndex].contours );
 				}
 				if ( 'text' == elemData[elemIndex].type ) {
-					elemData[elemIndex] = getTextAttrs( _tgt[childIndex], elemData[elemIndex] );
+					elemData[elemIndex] = getTextAttrs( elements[childIndex], elemData[elemIndex] );
 				}
-				if ( null != _tgt[childIndex].mask && _tgt[childIndex].mask.enabled ) {
-					elemData[elemIndex].mask = getMaskAttrs( _tgt[childIndex].mask );
+				if ( null != elements[childIndex].mask && elements[childIndex].mask.enabled ) {
+					elemData[elemIndex].mask = getMaskAttrs( elements[childIndex].mask );
 				}
 				if ( 'symbol' == elemData[elemIndex].type ) {
-					fw.selection = _tgt[childIndex];
+					fw.selection = elements[childIndex];
 					d.detachInstanceFromSymbol();
 					var sel = fw.selection[0];
 					elemData[elemIndex].elements = getElemAttrs( sel.elements );
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
-					elemData[elemIndex].uri = exportBitmap( _tgt[childIndex] );
+					elemData[elemIndex].uri = exportBitmap( elements[childIndex] );
 					// console.log( elemData[elemIndex].uri );
 				}
 				if ( 'group' == elemData[elemIndex].type ) {
 					// console.log( '- Group: into child ---------------------------' );
-					elemData[elemIndex].elements = getElemAttrs( _tgt[childIndex].elements );
+					elemData[elemIndex].elements = getElemAttrs( elements[childIndex].elements );
 				}
-				if ( null != _tgt[childIndex].effectList && 0 != _tgt[childIndex].effectList.length ) {
-					elemData[elemIndex].effectList = getEffect( _tgt[childIndex].effectList );
+				if ( null != elements[childIndex].effectList && 0 != elements[childIndex].effectList.length ) {
+					elemData[elemIndex].effectList = getEffect( elements[childIndex].effectList );
 					// console.log( elemData[elemIndex].effectList );
 				}
 				elemIndex++;
 			} else {
-				console.log( _tgt[childIndex].name );
-				elemData[elemIndex] = getChildLayerAttrs( _tgt[childIndex] );
+				console.log( elements[childIndex].name );
+				elemData[elemIndex] = getChildLayerAttrs( elements[childIndex] );
 				elemIndex++;
 				console.log( 'get Layer F' );
 			}
@@ -225,26 +225,26 @@ var console = console || {};
 		return elemData;
 	}
 
-	function getEffect( attrs ) {
+	function getEffect( effectList ) {
 		var effects = {};
-		effects = getJavaScriptString( attrs );
+		effects = getJavaScriptString( effectList );
 
 		return effects;
 	}
 
-	function exportBitmap( _tgt ) {
-		console.log( '  > Frame No.', frameIndex + 1, _tgt.name );
-		console.log( '  > ' + _tgt.toString() );
-		console.log( _tgt );
+	function exportBitmap( element ) {
+		console.log( '  > Frame No.', frameIndex + 1, element.name );
+		console.log( '  > ' + element.toString() );
+		console.log( element );
 		// fw.getDocumentDOM().currentFrameNum = frameIndex;
-		if ( '[object Text]' == _tgt.toString() ) {
-			var objectName = _tgt.textChars + '-' + bitmapCounter++;
+		if ( '[object Text]' == element.toString() ) {
+			var objectName = element.textChars + '-' + bitmapCounter++;
 		} else {
-			var objectName = ( _tgt.name ) ? _tgt.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
+			var objectName = ( element.name ) ? element.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
 		}
 		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
-		fw.selection = _tgt;
-		_tgt.visible = true;
+		fw.selection = element;
+		element.visible = true;
 
 		fw.clipCopy();
 		fw.createDocument();
@@ -256,82 +256,82 @@ var console = console || {};
 		return savePath;
 	}
 
-	function getMaskAttrs( _attrs ) {
+	function getMaskAttrs( mask ) {
 		var attrs = {};
 
-		attrs.mode = _attrs.mode;
-		var elems = [_attrs.element];
+		attrs.mode = mask.mode;
+		var elems = [mask.element];
 		attrs.element = getElemAttrs( elems );
 
 		return attrs;
 	}
 
-	function getRectangleAttrs( _attrs, _origin ) {
+	function getRectangleAttrs( element, _origin ) {
 		_origin.transform = { "matrix": []};
-		for ( var i = _attrs.transform.matrix.length - 1; i >= 0; i-- ) {
-			_origin.transform.matrix[i] = _attrs.transform.matrix[i];
+		for ( var i = element.transform.matrix.length - 1; i >= 0; i-- ) {
+			_origin.transform.matrix[i] = element.transform.matrix[i];
 		};
 
 		_origin.originalSides = {};
-		_origin.originalSides['left']   = _attrs.originalSides.left;
-		_origin.originalSides['right']  = _attrs.originalSides.right;
-		_origin.originalSides['top']    = _attrs.originalSides.top;
-		_origin.originalSides['bottom'] = _attrs.originalSides.bottom;
+		_origin.originalSides['left']   = element.originalSides.left;
+		_origin.originalSides['right']  = element.originalSides.right;
+		_origin.originalSides['top']    = element.originalSides.top;
+		_origin.originalSides['bottom'] = element.originalSides.bottom;
 
-		_origin.radius = _attrs.roundness;
+		_origin.radius = element.roundness;
 
 		return _origin;
 	}
 
-	function getTextAttrs( obj, basics ) {
+	function getTextAttrs( element, _origin ) {
 		// console.log( '-> start' );
-		var attrs = basics;
+		var attrs = _origin;
 
-		attrs.rawHeight     = obj.rawHeight;
-		attrs.rawWidth      = obj.rawWidth;
-		attrs.rawTop        = obj.rawTop;
-		attrs.rawLeft       = obj.rawLeft;
-		attrs.autoExpand    = obj.autoExpand;
-		attrs.antiAliasMode = obj.antiAliasMode;
-		attrs.antiAliased   = obj.antiAliased;
-		attrs.autoKern      = obj.autoKern;
-		attrs.orientation   = obj.orientation;
-		attrs.textChars     = obj.textChars;
+		attrs.rawHeight     = element.rawHeight;
+		attrs.rawWidth      = element.rawWidth;
+		attrs.rawTop        = element.rawTop;
+		attrs.rawLeft       = element.rawLeft;
+		attrs.autoExpand    = element.autoExpand;
+		attrs.antiAliasMode = element.antiAliasMode;
+		attrs.antiAliased   = element.antiAliased;
+		attrs.autoKern      = element.autoKern;
+		attrs.orientation   = element.orientation;
+		attrs.textChars     = element.textChars;
 
-		attrs.fontFace = obj.textRuns.initialAttrs.face;
-		attrs.fontSize = obj.textRuns.initialAttrs.size.slice( 0, -2 );
-		attrs.alignment = obj.textRuns.initialAttrs.alignment;
-		attrs.underline = obj.textRuns.initialAttrs.underline;
-		attrs.fillColor = obj.textRuns.initialAttrs.fillColor;
-		attrs.baselineShift = obj.textRuns.initialAttrs.baselineShift;
-		attrs.paragraphIndent        = obj.textRuns.initialAttrs.paragraphIndent;
-		attrs.paragraphSpacingBefore = obj.textRuns.initialAttrs.paragraphSpacingBefore;
-		attrs.paragraphSpacingAfter  = obj.textRuns.initialAttrs.paragraphSpacingAfter;
-		if ( 'percentage' == obj.textRuns.initialAttrs.leadingMode ) {
-			attrs.leading = attrs.fontSize * floorWithDigit( obj.textRuns.initialAttrs.leading, 2 );
+		attrs.fontFace = element.textRuns.initialAttrs.face;
+		attrs.fontSize = element.textRuns.initialAttrs.size.slice( 0, -2 );
+		attrs.alignment = element.textRuns.initialAttrs.alignment;
+		attrs.underline = element.textRuns.initialAttrs.underline;
+		attrs.fillColor = element.textRuns.initialAttrs.fillColor;
+		attrs.baselineShift = element.textRuns.initialAttrs.baselineShift;
+		attrs.paragraphIndent        = element.textRuns.initialAttrs.paragraphIndent;
+		attrs.paragraphSpacingBefore = element.textRuns.initialAttrs.paragraphSpacingBefore;
+		attrs.paragraphSpacingAfter  = element.textRuns.initialAttrs.paragraphSpacingAfter;
+		if ( 'percentage' == element.textRuns.initialAttrs.leadingMode ) {
+			attrs.leading = attrs.fontSize * floorWithDigit( element.textRuns.initialAttrs.leading, 2 );
 		} else {
-			attrs.leading = obj.textRuns.initialAttrs.leading;
+			attrs.leading = element.textRuns.initialAttrs.leading;
 		}
 
 		attrs.textRuns = [];
-		if ( null != obj.textRuns.textRuns ) {
-			for ( var i = obj.textRuns.textRuns.length - 1; i >= 0; i-- ) {
+		if ( null != element.textRuns.textRuns ) {
+			for ( var i = element.textRuns.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
-				attrs.textRuns[i].characters = obj.textRuns.textRuns[i].characters;
+				attrs.textRuns[i].characters = element.textRuns.textRuns[i].characters;
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\t', '\t' );
-				attrs.textRuns[i].size = obj.textRuns.textRuns[i].changedAttrs.size.slice( 0, -2 );
-				attrs.textRuns[i].face = obj.textRuns.textRuns[i].changedAttrs.face;
-				attrs.textRuns[i].bold = obj.textRuns.textRuns[i].changedAttrs.bold;
-				attrs.textRuns[i].italic = obj.textRuns.textRuns[i].changedAttrs.italic;
-				attrs.textRuns[i].underline = obj.textRuns.textRuns[i].changedAttrs.underline;
-				attrs.textRuns[i].fillColor = obj.textRuns.textRuns[i].changedAttrs.fillColor;
-				attrs.textRuns[i].baselineShift = obj.textRuns.textRuns[i].changedAttrs.baselineShift;
-				if ( 'percentage' == obj.textRuns.textRuns[i].changedAttrs.leadingMode ) {
-					attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( obj.textRuns.textRuns[i].changedAttrs.leading, 2 );
+				attrs.textRuns[i].size = element.textRuns.textRuns[i].changedAttrs.size.slice( 0, -2 );
+				attrs.textRuns[i].face = element.textRuns.textRuns[i].changedAttrs.face;
+				attrs.textRuns[i].bold = element.textRuns.textRuns[i].changedAttrs.bold;
+				attrs.textRuns[i].italic = element.textRuns.textRuns[i].changedAttrs.italic;
+				attrs.textRuns[i].underline = element.textRuns.textRuns[i].changedAttrs.underline;
+				attrs.textRuns[i].fillColor = element.textRuns.textRuns[i].changedAttrs.fillColor;
+				attrs.textRuns[i].baselineShift = element.textRuns.textRuns[i].changedAttrs.baselineShift;
+				if ( 'percentage' == element.textRuns.textRuns[i].changedAttrs.leadingMode ) {
+					attrs.textRuns[i].leading = attrs.textRuns[i].size * floorWithDigit( element.textRuns.textRuns[i].changedAttrs.leading, 2 );
 				} else {
-					attrs.textRuns[i].leading = obj.textRuns.initialAttrs.leading;
+					attrs.textRuns[i].leading = element.textRuns.initialAttrs.leading;
 				}
 			};
 		}
@@ -340,22 +340,22 @@ var console = console || {};
 	}
 	//getTextAttrs( sel[0].textRuns );
 
-	function getPathNodes( obj ) {
+	function getPathNodes( contours ) {
 		// console.log( '-> start' );
 		var attrs = [];
 
-		for ( var i = obj.length - 1; i >= 0; i-- ) {
+		for ( var i = contours.length - 1; i >= 0; i-- ) {
 			attrs[i] = {};
-			attrs[i].isClosed = obj[i].isClosed;
+			attrs[i].isClosed = contours[i].isClosed;
 			attrs[i].nodes = [];
-			for ( var j = obj[i].nodes.length - 1; j >= 0; j-- ) {
-				attrs[i].nodes[j] = { "isCurvePoint": obj[i].nodes[j].isCurvePoint };
-				attrs[i].nodes[j].x = obj[i].nodes[j].x;
-				attrs[i].nodes[j].y = obj[i].nodes[j].y;
-				attrs[i].nodes[j].succX = obj[i].nodes[j].succX;
-				attrs[i].nodes[j].succY = obj[i].nodes[j].succY;
-				attrs[i].nodes[j].predX = obj[i].nodes[j].predX;
-				attrs[i].nodes[j].predY = obj[i].nodes[j].predY;
+			for ( var j = contours[i].nodes.length - 1; j >= 0; j-- ) {
+				attrs[i].nodes[j] = { "isCurvePoint": contours[i].nodes[j].isCurvePoint };
+				attrs[i].nodes[j].x = contours[i].nodes[j].x;
+				attrs[i].nodes[j].y = contours[i].nodes[j].y;
+				attrs[i].nodes[j].succX = contours[i].nodes[j].succX;
+				attrs[i].nodes[j].succY = contours[i].nodes[j].succY;
+				attrs[i].nodes[j].predX = contours[i].nodes[j].predX;
+				attrs[i].nodes[j].predY = contours[i].nodes[j].predY;
 			};
 		};
 
@@ -363,19 +363,19 @@ var console = console || {};
 	}
 	//getPathNodes( sel[0].contours );
 
-	function getExportOptions( _tgt ) {
+	function getExportOptions( exportOptions ) {
 		// console.log( '-> start' );
 		var attrs = {};
 
-		attrs.exportFormat = _tgt.exportFormat;
-		attrs.jpegQuality = _tgt.jpegQuality;
+		attrs.exportFormat = exportOptions.exportFormat;
+		attrs.jpegQuality = exportOptions.jpegQuality;
 
 		return attrs;
 	}
 
-	function getPathAttributes( obj ) {
+	function getPathAttributes( element ) {
 		var attrs = {};
-		attrs = getJavaScriptString( obj.pathAttributes );
+		attrs = getJavaScriptString( element.pathAttributes );
 
 		// fill attributes
 		attrs.fillType = null;
@@ -386,7 +386,7 @@ var console = console || {};
 				attrs.fillType = 'gradient';
 			}
 			if ( null != attrs.fill.pattern ) {
-				attrs.fill.pattern.patternURI = exportBitmap( obj );
+				attrs.fill.pattern.patternURI = exportBitmap( element );
 				attrs.fillType = 'pattern';
 			}
 		}
