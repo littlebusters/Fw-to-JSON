@@ -24,7 +24,8 @@ var console = console || {};
 		"[object Instance]": "symbol",
 		"[object SliceHotspot]": "slice",
 		"[object Layer]": "layer",
-		"[object Image]": "bitmap"
+		"[object Image]": "bitmap",
+		"[object FrameNLayerIntersection]": "layer",
 	}
 
 	fwJSON.documentSetting.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
@@ -53,6 +54,7 @@ var console = console || {};
 	var frameIndex = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
+		d.currentFrameNum = frameIndex;
 		d = fw.getDocumentDOM();
 		sceneLayerIndex = 0;
 
@@ -73,9 +75,9 @@ var console = console || {};
 		fwJSON.pages[pageIndex].frames = [];
 		for ( frameIndex = 0; frameIndex < d.frames.length; frameIndex++ ) {
 			sceneLayerIndex = 0;
-			console.log( 'Frame: ', frameIndex + 1 );
+			console.log( 'Frame:', frameIndex + 1 );
 			fwJSON.pages[pageIndex].frames[frameIndex] = {};
-			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.topLayers );
+			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.frames[frameIndex].topLayers );
 		};
 	};
 
@@ -110,8 +112,9 @@ var console = console || {};
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 			// console.log( layerData[layerIndex].name );
-			if ( _tgt[layerIndex].elems.length ) {
-				layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
+			if ( _tgt[layerIndex].elements.length ) {
+				// layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elems );
+				layerData[layerIndex].elems = getElemAttrs( _tgt[layerIndex].elements );
 				layerData[layerIndex].hasChildren = true;
 			} else {
 				layerData[layerIndex].hasChildren = false;
@@ -130,8 +133,9 @@ var console = console || {};
 		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 		console.log( layerData.name );
-		if ( _tgt.elems.length ) {
-			layerData.elems = getElemAttrs( _tgt.elems );
+		if ( _tgt.elements.length ) {
+			// layerData.elems = getElemAttrs( _tgt.elems );
+			layerData.elems = getElemAttrs( _tgt.elements );
 			layerData.hasChildren = true;
 		} else {
 			layerData.hasChildren = false;
@@ -162,7 +166,7 @@ var console = console || {};
 				for ( var angle in _tgt[childIndex].pixelRect ) {
 					elemData[elemIndex].pixelRect[angle] = _tgt[childIndex].pixelRect[angle];
 				}
-				console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
+				// console.log( elemData[elemIndex].name, elemData[elemIndex].type, '/// got basics ///' );
 
 				if ( 'group' != elemData[elemIndex].type 
 					&& 'symbol' != elemData[elemIndex].type
@@ -201,6 +205,7 @@ var console = console || {};
 					// console.log( elemData[elemIndex].uri );
 				}
 				if ( 'group' == elemData[elemIndex].type ) {
+					// console.log( '- Group: into child ---------------------------' );
 					elemData[elemIndex].elements = getElemAttrs( _tgt[childIndex].elements );
 				}
 				if ( null != _tgt[childIndex].effectList && 0 != _tgt[childIndex].effectList.length ) {
@@ -228,18 +233,22 @@ var console = console || {};
 	}
 
 	function exportBitmap( _tgt ) {
-		fw.selection = _tgt;
-		_tgt.visible = true;
+		console.log( '  > Frame No.', frameIndex + 1, _tgt.name );
+		console.log( '  > ' + _tgt.toString() );
+		console.log( _tgt );
+		// fw.getDocumentDOM().currentFrameNum = frameIndex;
 		if ( '[object Text]' == _tgt.toString() ) {
-			var objectName = _tgt.textChars + bitmapCounter++;
+			var objectName = _tgt.textChars + '-' + bitmapCounter++;
 		} else {
-			var objectName = ( _tgt.name ) ? _tgt.name + bitmapCounter++ : 'unnamedObject' + bitmapCounter++;
+			var objectName = ( _tgt.name ) ? _tgt.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
 		}
 		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
+		fw.selection = _tgt;
+		_tgt.visible = true;
 
-		d.clipCopy();
+		fw.clipCopy();
 		fw.createDocument();
-		fw.getDocumentDOM().clipPaste( 'do not resample' );
+		fw.clipPaste( 'do not resample' );
 		fw.getDocumentDOM().backgroundColor = '#ffffff00';
 		fw.saveDocument( null, savePath );
 		fw.getDocumentDOM().close( false );
