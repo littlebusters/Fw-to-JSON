@@ -25,8 +25,9 @@ var console = console || {};
 		"[object SliceHotspot]": "slice",
 		"[object Layer]": "layer",
 		"[object Image]": "bitmap",
-		"[object FrameNLayerIntersection]": "layer",
+		"[object FrameNLayerIntersection]": "layer"
 	}
+	var exportLayers;
 
 	fwJSON.documentSetting.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
 	fwJSON.documentSetting.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
@@ -54,7 +55,7 @@ var console = console || {};
 	var frameIndex = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
-		d.currentFrameNum = frameIndex;
+		d.currentFrameNum = 0;
 		d = fw.getDocumentDOM();
 		sceneLayerIndex = 0;
 
@@ -75,9 +76,13 @@ var console = console || {};
 		fwJSON.pages[pageIndex].frames = [];
 		for ( frameIndex = 0; frameIndex < d.frames.length; frameIndex++ ) {
 			sceneLayerIndex = 0;
+			d.currentFrameNum = frameIndex;
+			exportLayers = [];
+
 			console.log( 'Frame:', frameIndex + 1 );
 			fwJSON.pages[pageIndex].frames[frameIndex] = {};
 			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.frames[frameIndex].topLayers );
+			exportBitmaps( exportLayers );
 		};
 	};
 
@@ -112,7 +117,7 @@ var console = console || {};
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 			// console.log( layerData[layerIndex].name );
-			if ( topLayers[layerIndex].elements.length ) {
+			if ( null != topLayers[layerIndex].elements ) {
 				// layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elems );
 				layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elements );
 				layerData[layerIndex].hasChildren = true;
@@ -130,10 +135,12 @@ var console = console || {};
 
 		layerData.name = layer.name;
 		layerData.type = layerType[layer.toString()];
+		layerData.locked = d.frames[frameIndex].layers[sceneLayerIndex].locked;
+		layerData.visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
 		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 		console.log( layerData.name );
-		if ( layer.elements.length ) {
+		if ( null != layer.elements ) {
 			// layerData.elems = getElemAttrs( layer.elems );
 			layerData.elems = getElemAttrs( layer.elements );
 			layerData.hasChildren = true;
@@ -201,7 +208,7 @@ var console = console || {};
 					elemData[elemIndex].elements = getElemAttrs( sel.elements );
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
-					elemData[elemIndex].uri = exportBitmap( elements[childIndex] );
+					elemData[elemIndex].uri = createExportPath( elements[childIndex] );
 					// console.log( elemData[elemIndex].uri );
 				}
 				if ( 'group' == elemData[elemIndex].type ) {
@@ -232,10 +239,23 @@ var console = console || {};
 		return effects;
 	}
 
-	function exportBitmap( element ) {
+	function exportBitmaps( exportLayers ) {
+		for (var i = 0; i < exportLayers.length; i++) {
+			fw.selection = exportLayers[i].element;
+
+			fw.getDocumentDOM().clipCopy();
+			fw.createDocument();
+			fw.getDocumentDOM().clipPaste( 'do not resample' );
+			fw.selection[0].visible = true;
+			fw.getDocumentDOM().backgroundColor = '#ffffff00';
+			fw.saveDocument( null, exportLayers[i].path );
+			fw.getDocumentDOM().close( false );
+		};
+	}
+
+	function createExportPath( element ) {
 		console.log( '  > Frame No.', frameIndex + 1, element.name );
 		console.log( '  > ' + element.toString() );
-		console.log( element );
 		// fw.getDocumentDOM().currentFrameNum = frameIndex;
 		if ( '[object Text]' == element.toString() ) {
 			var objectName = element.textChars + '-' + bitmapCounter++;
@@ -243,15 +263,16 @@ var console = console || {};
 			var objectName = ( element.name ) ? element.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
 		}
 		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
-		fw.selection = element;
-		element.visible = true;
+		exportLayers.push( {element: element, path: savePath} );
+		// fw.selection = element;
+		// element.visible = true;
 
-		fw.clipCopy();
-		fw.createDocument();
-		fw.clipPaste( 'do not resample' );
-		fw.getDocumentDOM().backgroundColor = '#ffffff00';
-		fw.saveDocument( null, savePath );
-		fw.getDocumentDOM().close( false );
+		// fw.clipCopy();
+		// fw.createDocument();
+		// fw.clipPaste( 'do not resample' );
+		// fw.getDocumentDOM().backgroundColor = '#ffffff00';
+		// fw.saveDocument( null, savePath );
+		// fw.getDocumentDOM().close( false );
 
 		return savePath;
 	}
@@ -386,7 +407,7 @@ var console = console || {};
 				attrs.fillType = 'gradient';
 			}
 			if ( null != attrs.fill.pattern ) {
-				attrs.fill.pattern.patternURI = exportBitmap( element );
+				attrs.fill.pattern.patternURI = createExportPath( element );
 				attrs.fillType = 'pattern';
 			}
 		}
