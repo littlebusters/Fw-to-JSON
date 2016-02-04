@@ -25,7 +25,8 @@ var console = console || {};
 		"[object SliceHotspot]": "slice",
 		"[object Layer]": "layer",
 		"[object Image]": "bitmap",
-		"[object FrameNLayerIntersection]": "layer"
+		"[object FrameNLayerIntersection]": "layer",
+		"[object FwArray]": "layer"
 	}
 	var exportLayers;
 
