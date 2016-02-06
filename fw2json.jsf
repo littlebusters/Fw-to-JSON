@@ -96,6 +96,8 @@
 	FwJSONstr = FwJSONstr.replace( reg, '');
 	reg = new RegExp( /\)$/g );
 	FwJSONstr = FwJSONstr.replace( reg, '');
+	reg = new RegExp( /\\x/g );
+	FwJSONstr = FwJSONstr.replace( reg, '\\u00');
 
 	// Export to JSON
 	if ( choose ) {
