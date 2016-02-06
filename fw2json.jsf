@@ -4,7 +4,6 @@
 // auther: @littlebusters
 // license: MIT
 
-var console = console || {};
 (function()
 {
 	try {
