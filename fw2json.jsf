@@ -68,7 +68,7 @@
 		fwJSON.pages[pageIndex].width = d.width;
 		fwJSON.pages[pageIndex].height = d.height;
 		fwJSON.pages[pageIndex].guides = {"x": [], "y": []};
-		console.log( fwJSON.pages[pageIndex].pageName );
+		// console.log( fwJSON.pages[pageIndex].pageName );
 		for (var i = d.guides.vGuides.length - 1; i >= 0; i--) {
 			fwJSON.pages[pageIndex].guides.x[i] = d.guides.vGuides[i];
 		};
@@ -82,7 +82,7 @@
 			d.currentFrameNum = frameIndex;
 			exportLayers = [];
 
-			console.log( 'Frame:', frameIndex + 1 );
+			// console.log( 'Frame:', frameIndex + 1 );
 			fwJSON.pages[pageIndex].frames[frameIndex] = {};
 			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.frames[frameIndex].topLayers );
 			exportBitmaps( exportLayers );
@@ -146,7 +146,7 @@
 		layerData.visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
 		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
-		console.log( layerData.name );
+		// console.log( layerData.name );
 		if ( null != layer.elements ) {
 			// layerData.elems = getElemAttrs( layer.elems );
 			layerData.elems = getElemAttrs( layer.elements );
@@ -228,10 +228,10 @@
 				}
 				elemIndex++;
 			} else {
-				console.log( elements[childIndex].name );
+				// console.log( elements[childIndex].name );
 				elemData[elemIndex] = getChildLayerAttrs( elements[childIndex] );
 				elemIndex++;
-				console.log( 'get Layer F' );
+				// console.log( 'get Layer F' );
 			}
 		}
 		// console.log( elemData );
@@ -261,8 +261,8 @@
 	}
 
 	function createExportPath( element ) {
-		console.log( '  > Frame No.', frameIndex + 1, element.name );
-		console.log( '  > ' + element.toString() );
+		// console.log( '  > Frame No.', frameIndex + 1, element.name );
+		// console.log( '  > ' + element.toString() );
 		// fw.getDocumentDOM().currentFrameNum = frameIndex;
 		if ( '[object Text]' == element.toString() ) {
 			var objectName = element.textChars + '-' + bitmapCounter++;
