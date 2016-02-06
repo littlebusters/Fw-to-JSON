@@ -11,8 +11,11 @@
 	} catch( e ) {
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
 	}
-	var d = fw.getDocumentDOM();
+	var fileVersion = '0.9.0';
+
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
+	    fwJSON.fileVersion = fileVersion;
+	var d = fw.getDocumentDOM();
 	var pageSetter = d.getPageSetter();
 	var bitmapCounter = 1;
 	var layerType = {
