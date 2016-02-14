@@ -1,6 +1,6 @@
 // Fireworks Extension: Command
 // Create JSON from Fireworks PNG.
-// version: 0.0.1
+// version: 0.9.0
 // auther: @littlebusters
 // license: MIT
 
@@ -8,8 +8,10 @@
 {
 	try {
 		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/i18n.fss' );
+		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	} catch( e ) {
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
+		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	}
 	var fileVersion = '0.9.0';
 
@@ -98,6 +100,8 @@
 	FwJSONstr = FwJSONstr.replace( reg, '');
 	reg = new RegExp( /\\x/g );
 	FwJSONstr = FwJSONstr.replace( reg, '\\u00');
+	reg = new RegExp( /\\v/g );
+	FwJSONstr = FwJSONstr.replace( reg, '\\u000B');
 
 	// Export to JSON
 	if ( choose ) {
