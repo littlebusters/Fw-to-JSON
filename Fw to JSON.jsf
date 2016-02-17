@@ -215,6 +215,8 @@
 					elemData[elemIndex].mask = getMaskAttrs( elements[childIndex].mask );
 				}
 				if ( 'symbol' == elemData[elemIndex].type ) {
+					elemData[elemIndex].symbolName = elements[childIndex].symbolName;
+					elemData[elemIndex].symbolID = elements[childIndex].symbolID;
 					fw.selection = elements[childIndex];
 					d.detachInstanceFromSymbol();
 					var sel = fw.selection[0];
@@ -352,6 +354,7 @@
 			for ( var i = element.textRuns.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
 				attrs.textRuns[i].characters = element.textRuns.textRuns[i].characters;
+				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( ':', '\:' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\t', '\t' );
