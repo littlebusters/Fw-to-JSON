@@ -130,9 +130,9 @@
 			layerData[layerIndex].parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 			// console.log( layerData[layerIndex].name );
-			if ( null != topLayers[layerIndex].elements ) {
+			if ( null != topLayers[layerIndex].elemsandsublayers ) {
 				// layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elems );
-				layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elements );
+				layerData[layerIndex].elems = getElemAttrs( topLayers[layerIndex].elemsandsublayers );
 				layerData[layerIndex].hasChildren = true;
 			} else {
 				layerData[layerIndex].hasChildren = false;
@@ -153,9 +153,8 @@
 		layerData.parentLayerNum = d.getParentLayerNum( sceneLayerIndex++ );
 
 		// console.log( layerData.name );
-		if ( null != layer.elements ) {
-			// layerData.elems = getElemAttrs( layer.elems );
-			layerData.elems = getElemAttrs( layer.elements );
+		if ( null != layer.elems ) {
+			layerData.elems = getElemAttrs( layer.elems );
 			layerData.hasChildren = true;
 		} else {
 			layerData.hasChildren = false;
