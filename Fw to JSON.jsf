@@ -334,6 +334,11 @@
 		attrs.orientation   = element.orientation;
 		attrs.textChars     = element.textChars;
 
+		attrs.textChars = attrs.textChars.replace( ':', '\:' );
+		attrs.textChars = attrs.textChars.replace( '\n', '\n' );
+		attrs.textChars = attrs.textChars.replace( '\r', '\r' );
+		attrs.textChars = attrs.textChars.replace( '\t', '\t' );
+
 		attrs.fontFace = element.textRuns.initialAttrs.face;
 		attrs.fontSize = element.textRuns.initialAttrs.size.slice( 0, -2 );
 		attrs.alignment = element.textRuns.initialAttrs.alignment;
