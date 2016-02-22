@@ -33,6 +33,7 @@
 		"[object FwArray]": "layer"
 	}
 	var exportLayers;
+	var textureCollectFileURLs = {};
 
 	fwJSON.documentSetting.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
 	fwJSON.documentSetting.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
@@ -90,6 +91,8 @@
 			exportBitmaps( exportLayers );
 		};
 	};
+
+	collectResourceFiles( textureCollectFileURLs );
 
 	var FwJSONstr = fwJSON.toSource();
 	var reg = new RegExp( /(\{)([\w_]+):|( )([\w_]+):/g );
@@ -430,9 +433,55 @@
 				attrs.fill.pattern.patternURI = createExportPath( element );
 				attrs.fillType = 'pattern';
 			}
+			if ( 0 < attrs.fill.textureBlend ) {
+				attrs.fillTexture = collectTexture( attrs.fillTexture );
+			}
 		}
 
 		return attrs;
+	}
+
+	function collectTexture ( texture ) {
+		// console.log( '-> start' );
+		var separator = ( 'mac' == fw.platform ) ? ':' : '\\';
+
+		if ( -1 != texture.name.search( separator ) ) {
+			var openURL = 'file:///' + texture.name.replace( /[:\\]/g, '/' );
+			var separatedPath = texture.name.split( separator );
+			var textureName = separatedPath[separatedPath.length - 1].replace( /[- ]/g, '_' );
+		} else {
+			var textureName = texture.name.replace( /[- ]/, '_' );
+			var openURL = fw.appTexturesDir + '/' + fw2jsonLib.defaultTextures[textureName];
+		}
+
+		textureCollectFileURLs[textureName] = {};
+		if ( Files.exists( openURL ) ) {
+			texture.filePath = exportDir + '/' + bitmapExportDirName + textureName + '.png';
+			textureCollectFileURLs[textureName].currentFilePath = openURL;
+			textureCollectFileURLs[textureName].savePath = texture.filePath;
+		} else {
+			texture.filePath = false;
+			textureCollectFileURLs[textureName].currentFilePath = false;
+			textureCollectFileURLs[textureName].savePath = texture.filePath;
+		}
+		texture.alias = textureName;
+		console.log( textureName, '\n', openURL, '\n', texture.filePath );
+
+		return texture;
+	}
+
+	function collectResourceFiles ( collectFiles, type ) {
+		for ( textureName in collectFiles ) {
+			if ( false != collectFiles[textureName].currentFilePath ) {
+				fw.openDocument( collectFiles[textureName].currentFilePath, false, false );
+				fw.getDocumentDOM().selectAll();
+				fw.getDocumentDOM().flattenSelection();
+				fw.getDocumentDOM().filterSelection({ EffectIsVisible:true, EffectMoaID:"{3439b08d-1922-11d3-9bde00e02910d580}", MB_filter_preview_tile_size:"-1 -1", hls_colorize:false, hue_amount:0, lightness_amount:0, saturation_amount:-100 });
+				fw.getDocumentDOM().filterSelection({ EffectMoaID:"{d2541291-70d6-11d1-8c8000a024cdc039}", MB_filter_preview_tile_size:"-1 -1" });
+				fw.saveAs( null, collectFiles[textureName].savePath, false );
+				fw.getDocumentDOM().close( false );
+			}
+		}
 	}
 
 
