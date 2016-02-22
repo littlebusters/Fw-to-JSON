@@ -3,7 +3,7 @@
 // auther: @littlebusters
 // license: MIT
 var fw2jsonLib = fw2jsonLib || {};
-fw2jsonLib.defaultTextures = [];
+fw2jsonLib.defaultTextures = {};
 	fw2jsonLib.defaultTextures['Burlap'] = 'Burlap.png';
 	fw2jsonLib.defaultTextures['Chiffon'] = 'Chiffon.png';
 	fw2jsonLib.defaultTextures['Confetti'] = 'Confetti.png';
@@ -57,7 +57,7 @@ fw2jsonLib.defaultTextures = [];
 	fw2jsonLib.defaultTextures['Waffle'] = 'Waffle.gif';
 	fw2jsonLib.defaultTextures['Wood'] = 'Wood.png';
 
-fw2jsonLib.defaultPatterns = [];
+fw2jsonLib.defaultPatterns = {};
 	fw2jsonLib.defaultPatterns['Berber_Rug'] = 'Berber Rug.jpg';
 	fw2jsonLib.defaultPatterns['Blue_Green'] = 'Blue Green.jpg';
 	fw2jsonLib.defaultPatterns['Blue_Wave'] = 'Blue Wave.jpg';
