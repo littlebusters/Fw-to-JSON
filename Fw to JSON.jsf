@@ -101,7 +101,6 @@
 			fwJSON.pages[pageIndex].frames[frameIndex] = {};
 			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.frames[frameIndex].topLayers );
 			frameCount++;
-			objectCount++;
 			exportBitmaps( exportLayers );
 		};
 	};
@@ -174,9 +173,9 @@
 			} else {
 				layerData[layerIndex].hasChildren = false;
 			}
+			objectCount++;
 		}
 
-		objectCount++;
 		return layerData;
 	}
 
@@ -298,10 +297,11 @@
 				elemIndex++;
 				// console.log( 'get Layer F' );
 			}
+			
+		objectCount++;
 		}
 		// console.log( elemData );
 
-		objectCount++;
 		return elemData;
 	}
 
