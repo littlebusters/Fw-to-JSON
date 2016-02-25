@@ -103,9 +103,9 @@
 	FwJSONstr = FwJSONstr.replace( reg, '{"');
 	reg = new RegExp( /':/g );
 	FwJSONstr = FwJSONstr.replace( reg, '":');
-	reg = new RegExp( /^\(/g );
-	FwJSONstr = FwJSONstr.replace( reg, '');
-	reg = new RegExp( /\)$/g );
+	reg = new RegExp( /\\\\:/g );
+	FwJSONstr = FwJSONstr.replace( reg, ':');
+	reg = new RegExp( /^\(|\)$/g );
 	FwJSONstr = FwJSONstr.replace( reg, '');
 	reg = new RegExp( /\\x/g );
 	FwJSONstr = FwJSONstr.replace( reg, '\\u00');
@@ -361,7 +361,7 @@
 		attrs.orientation   = element.orientation;
 		attrs.textChars     = element.textChars + '';
 
-		attrs.textChars = attrs.textChars.replace( ':', '\:' );
+		attrs.textChars = attrs.textChars.replace( ':', '\\:' );
 		attrs.textChars = attrs.textChars.replace( '\n', '\n' );
 		attrs.textChars = attrs.textChars.replace( '\r', '\r' );
 		attrs.textChars = attrs.textChars.replace( '\t', '\t' );
@@ -386,7 +386,7 @@
 			for ( var i = element.textRuns.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
 				attrs.textRuns[i].characters = element.textRuns.textRuns[i].characters + '';
-				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( ':', '\:' );
+				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( ':', '\\:' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\t', '\t' );
