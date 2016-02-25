@@ -15,7 +15,7 @@
 	}
 	var fileVersion = '0.9.0';
 
-	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": []};
+	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": [], "symbols": {}};
 	    fwJSON.fileVersion = fileVersion;
 	var d = fw.getDocumentDOM();
 	var pageSetter = d.getPageSetter();
@@ -34,6 +34,8 @@
 	}
 	var exportLayers;
 	var textureCollectFileURLs = {};
+	var dirSeparator = ( 'mac' == fw.platform ) ? '/' : '\\';
+	var documentSymbols = {}
 
 	fwJSON.documentSetting.grid = {"gridSize": {"x": d.gridSize.x, "y": d.gridSize.y}};
 	fwJSON.documentSetting.grid.gridOrigin = {"x": d.gridOrigin.x, "y": d.gridOrigin.y};
@@ -97,6 +99,10 @@
 	var FwJSONstr = fwJSON.toSource();
 	var reg = new RegExp( /(\{)([\w_]+):|( )([\w_]+):/g );
 	FwJSONstr = FwJSONstr.replace( reg, '$1$3"$2$4":');
+	reg = new RegExp( /{'/g );
+	FwJSONstr = FwJSONstr.replace( reg, '{"');
+	reg = new RegExp( /':/g );
+	FwJSONstr = FwJSONstr.replace( reg, '":');
 	reg = new RegExp( /^\(/g );
 	FwJSONstr = FwJSONstr.replace( reg, '');
 	reg = new RegExp( /\)$/g );
@@ -219,10 +225,29 @@
 				if ( 'symbol' == elemData[elemIndex].type ) {
 					elemData[elemIndex].symbolName = elements[childIndex].symbolName;
 					elemData[elemIndex].symbolID = elements[childIndex].symbolID;
-					fw.selection = elements[childIndex];
-					d.detachInstanceFromSymbol();
-					var sel = fw.selection[0];
-					elemData[elemIndex].elements = getElemAttrs( sel.elements );
+
+					var symbolID = elements[childIndex].symbolID + '__'
+					             + elements[childIndex].symbolName + '__'
+					             + elements[childIndex].width + '__'
+					             + elements[childIndex].height;
+		            var isCollected = false;
+					for ( item in fwJSON.symbols ) {
+						if ( symbolID == item ) {
+							isCollected = true;
+							break;
+						}
+					}
+
+					elemData[elemIndex].elements = symbolID;
+					
+					if ( !isCollected ) {
+						fwJSON.symbols[symbolID] = {};
+						fwJSON.symbols[symbolID].symbolName = elements[childIndex].symbolName;
+						fw.selection = elements[childIndex];
+						d.detachInstanceFromSymbol();
+						var sel = fw.selection[0];
+						fwJSON.symbols[symbolID].elements = getElemAttrs( sel.elements );
+					}
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
 					elemData[elemIndex].uri = createExportPath( elements[childIndex] );
@@ -447,7 +472,8 @@
 
 		if ( -1 != texture.name.search( dirSeparator ) ) {
 			var openURL = 'file:///' + texture.name.replace( /[:\\]/g, '/' );
-			var separatedPath = texture.name.split( separator );
+			openURL = openURL.replace( / /g, '%20' );
+			var separatedPath = texture.name.split( dirSeparator );
 			var textureName = separatedPath[separatedPath.length - 1].replace( /[- ]/g, '_' );
 		} else {
 			var textureName = texture.name.replace( /[- ]/, '_' );
