@@ -69,6 +69,8 @@
 
 	var sceneLayerIndex = 0;
 	var frameIndex = 0;
+	var frameCount = 0;
+	var objectCount = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
 		d.currentFrameNum = 0;
@@ -98,10 +100,14 @@
 			// console.log( 'Frame:', frameIndex + 1 );
 			fwJSON.pages[pageIndex].frames[frameIndex] = {};
 			fwJSON.pages[pageIndex].frames[frameIndex].topLayers = getLayerAttrs( d.frames[frameIndex].topLayers );
+			frameCount++;
+			objectCount++;
 			exportBitmaps( exportLayers );
 		};
 	};
 
+	var textureCount         = 0;
+	var textureNotFoundCount = 0;
 	collectResourceFiles( textureCollectFileURLs );
 
 	var FwJSONstr = fwJSON.toSource();
@@ -130,11 +136,20 @@
 	fileWrite.writeUTF8( FwJSONstr );
 	fileWrite.close();
 
-	alert( 'Exported!' );
+	// Build Message
+	var msg = 'Exported!';
+	    msg += '\r--\r' + d.pagesCount + ' page(s).';
+	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s) exported.' : '';
+	    msg += '\r' + objectCount + ' objects (include layers).';
 	if ( 1 == bitmapCounter && 0 == textureCount ) {
 		Files.deleteFileIfExisting ( exportDir + '/' + bitmapExportDirName );
+	} else {
+		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) exported.' : '';
+		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s) exported.' : '';
+		( 0 < textureNotFoundCount ) ? msg += '\r' + textureNotFoundCount + ' texture(s) not found.' : '';
 	}
 
+	alert( msg );
 
 
 	function getLayerAttrs( topLayers ) {
@@ -159,6 +174,7 @@
 			}
 		}
 
+		objectCount++;
 		return layerData;
 	}
 
@@ -180,6 +196,7 @@
 			layerData.hasChildren = false;
 		}
 
+		objectCount++;
 		return layerData;
 	}
 
@@ -282,6 +299,7 @@
 		}
 		// console.log( elemData );
 
+		objectCount++;
 		return elemData;
 	}
 
@@ -516,6 +534,9 @@
 				fw.getDocumentDOM().filterSelection({ EffectMoaID:"{d2541291-70d6-11d1-8c8000a024cdc039}", MB_filter_preview_tile_size:"-1 -1" });
 				fw.saveAs( null, collectFiles[textureName].savePath, false );
 				fw.getDocumentDOM().close( false );
+				textureCount++;
+			} else {
+				textureNotFoundCount++;
 			}
 		}
 	}
