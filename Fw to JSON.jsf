@@ -49,9 +49,9 @@
 		return false;
 	}
 	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
-	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
+	var bitmapExportDir = exportDir + '/' + 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	if ( Files.exists( filePath ) ) {
-		if ( Files.exists( bitmapExportDirName ) ) {
+		if ( Files.exists( bitmapExportDir ) ) {
 			var msg = 'JSON File and Export Directory Exists. Overwrite the file and delete the directory?'
 		} else {
 			var msg = 'JSON File Exists. Overwrite?';
@@ -61,11 +61,11 @@
 			alert( 'Canceled.' );
 			return false;
 		} else {
-			Files.deleteFileIfExisting( exportDir + '/' + bitmapExportDirName );
+			Files.deleteFileIfExisting( bitmapExportDir );
 		}
 	}
 
-	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
+	Files.createDirectory( bitmapExportDir );
 
 	var sceneLayerIndex = 0;
 	var frameIndex = 0;
@@ -144,7 +144,7 @@
 	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s) exported.' : '';
 	    msg += '\r' + objectCount + ' objects (include layers).';
 	if ( 1 == bitmapCounter && 0 == textureCount ) {
-		Files.deleteFileIfExisting ( exportDir + '/' + bitmapExportDirName );
+		Files.deleteFileIfExisting ( bitmapExportDir );
 	} else {
 		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) exported.' : '';
 		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s) exported.' : '';
@@ -335,7 +335,7 @@
 		} else {
 			var objectName = ( element.name ) ? element.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
 		}
-		var savePath = exportDir + '/' + bitmapExportDirName + objectName + '.png';
+		var savePath = bitmapExportDir + objectName + '.png';
 		exportLayers.push( {element: element, path: savePath} );
 		// fw.selection = element;
 		// element.visible = true;
@@ -513,7 +513,7 @@
 
 		textureCollectFileURLs[textureName] = {};
 		if ( Files.exists( openURL ) ) {
-			texture.filePath = exportDir + '/' + bitmapExportDirName + textureName + '.png';
+			texture.filePath = bitmapExportDir + textureName + '.png';
 			textureCollectFileURLs[textureName].currentFilePath = openURL;
 			textureCollectFileURLs[textureName].savePath = texture.filePath;
 		} else {
