@@ -49,14 +49,22 @@
 		return false;
 	}
 	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
+	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	if ( Files.exists( filePath ) ) {
-		var choose = confirm( 'JSON File Exists. Delete it?' );
+		if ( Files.exists( bitmapExportDirName ) ) {
+			var msg = 'JSON File and Export Directory Exists. Overwrite the file and delete the directory?'
+		} else {
+			var msg = 'JSON File Exists. Overwrite?';
+		}
+		var choose = confirm( msg );
 		if ( !choose ) {
 			alert( 'Canceled.' );
 			return false;
+		} else {
+			Files.deleteFileIfExisting( exportDir + '/' + bitmapExportDirName );
 		}
 	}
-	var bitmapExportDirName = 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
+
 	Files.createDirectory( exportDir + '/' + bitmapExportDirName );
 
 	var sceneLayerIndex = 0;
@@ -123,6 +131,9 @@
 	fileWrite.close();
 
 	alert( 'Exported!' );
+	if ( 1 == bitmapCounter && 0 == textureCount ) {
+		Files.deleteFileIfExisting ( exportDir + '/' + bitmapExportDirName );
+	}
 
 
 
