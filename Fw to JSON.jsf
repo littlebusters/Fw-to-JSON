@@ -52,7 +52,7 @@
 	var bitmapExportDir = exportDir + '/' + 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
 	if ( Files.exists( filePath ) ) {
 		if ( Files.exists( bitmapExportDir ) ) {
-			var msg = 'JSON File and Export Directory Exists. Overwrite the file and delete the directory?'
+			var msg = 'JSON File and Export Directory Exists. \rOverwrite the file and delete the directory?'
 		} else {
 			var msg = 'JSON File Exists. Overwrite?';
 		}
