@@ -434,6 +434,7 @@
 				attrs.fillType = 'pattern';
 			}
 			if ( 0 < attrs.fill.textureBlend ) {
+				attrs.fillTexture.name = attrs.fillTexture.name.replace( /[:\\]/g, '/' );
 				attrs.fillTexture = collectTexture( attrs.fillTexture );
 			}
 		}
@@ -443,9 +444,8 @@
 
 	function collectTexture ( texture ) {
 		// console.log( '-> start' );
-		var separator = ( 'mac' == fw.platform ) ? ':' : '\\';
 
-		if ( -1 != texture.name.search( separator ) ) {
+		if ( -1 != texture.name.search( dirSeparator ) ) {
 			var openURL = 'file:///' + texture.name.replace( /[:\\]/g, '/' );
 			var separatedPath = texture.name.split( separator );
 			var textureName = separatedPath[separatedPath.length - 1].replace( /[- ]/g, '_' );
