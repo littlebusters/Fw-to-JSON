@@ -71,6 +71,7 @@
 	var frameIndex = 0;
 	var frameCount = 0;
 	var objectCount = 0;
+	var symbolCount = 0;
 	for ( var pageIndex = 0; pageIndex < fwJSON.documentSetting.pageCount; pageIndex++ ) {
 		pageSetter.pageNum = pageIndex;
 		d.currentFrameNum = 0;
@@ -140,13 +141,14 @@
 	// Build Message
 	var msg = 'Exported!';
 	    msg += '\r--\r' + d.pagesCount + ' page(s).';
-	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s) exported.' : '';
-	    msg += '\r' + objectCount + ' objects (include layers).';
+	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s).' : '';
+	    msg += '\r' + objectCount + ' objects include layers.';
 	if ( 1 == bitmapCounter && 0 == textureCount ) {
 		Files.deleteFileIfExisting ( bitmapExportDir );
 	} else {
-		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) exported.' : '';
-		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s) exported.' : '';
+		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) and patterned fill(s).' : '';
+		( 0 < symbolCount ) ? msg += '\r' + symbolCount + ' symbol(s) include symbol of different boundary.' : '';
+		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s).' : '';
 		( 0 < textureNotFoundCount ) ? msg += '\r' + textureNotFoundCount + ' texture(s) not found.' : '';
 	}
 
@@ -276,6 +278,7 @@
 						d.detachInstanceFromSymbol();
 						var sel = fw.selection[0];
 						fwJSON.symbols[symbolID].elements = getElemAttrs( sel.elements );
+						symbolCount++;
 					}
 				}
 				if ( 'bitmap' == elemData[elemIndex].type ) {
@@ -297,7 +300,7 @@
 				elemIndex++;
 				// console.log( 'get Layer F' );
 			}
-			
+
 		objectCount++;
 		}
 		// console.log( elemData );
