@@ -258,7 +258,7 @@
 					elemData[elemIndex].symbolID = elements[childIndex].symbolID;
 
 					var symbolID = elements[childIndex].symbolID + '__'
-					             + elements[childIndex].symbolName + '__'
+					             + escape( elements[childIndex].symbolName ) + '__'
 					             + elements[childIndex].width + '__'
 					             + elements[childIndex].height;
 		            var isCollected = false;
