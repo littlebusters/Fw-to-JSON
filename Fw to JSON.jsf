@@ -142,12 +142,12 @@
 	var msg = 'Exported!';
 	    msg += '\r--\r' + d.pagesCount + ' page(s).';
 	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s).' : '';
-	    msg += '\r' + objectCount + ' objects include layers.';
+	    msg += '\r' + objectCount + ' objects (include layers).';
 	if ( 1 == bitmapCounter && 0 == textureCount ) {
 		Files.deleteFileIfExisting ( bitmapExportDir );
 	} else {
 		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) and patterned fill(s).' : '';
-		( 0 < symbolCount ) ? msg += '\r' + symbolCount + ' symbol(s) include symbol of different boundary.' : '';
+		( 0 < symbolCount ) ? msg += '\r' + symbolCount + ' symbol(s) (include symbol of different boundary).' : '';
 		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s).' : '';
 		( 0 < textureNotFoundCount ) ? msg += '\r' + textureNotFoundCount + ' texture(s) not found.' : '';
 	}
