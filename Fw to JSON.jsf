@@ -13,7 +13,7 @@
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	}
-	var fileVersion = '0.9.0';
+	var fileVersion = '0.9.1';
 
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": [], "symbols": {}};
 	    fwJSON.fileVersion = fileVersion;
