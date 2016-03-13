@@ -50,6 +50,7 @@
 	}
 	var filePath = exportDir + '/' + fwJSON.documentSetting.docName + '.json';
 	var bitmapExportDir = exportDir + '/' + 'fw2json-exported-' + fwJSON.documentSetting.docName + '/'; // need /
+	fwJSON.resExportedDir  = 'fw2json-exported-' + fwJSON.documentSetting.docName;
 	if ( Files.exists( filePath ) ) {
 		if ( Files.exists( bitmapExportDir ) ) {
 			var msg = 'JSON File and Export Directory Exists. \rOverwrite the file and delete the directory?'
