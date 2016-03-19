@@ -7,13 +7,11 @@
 (function()
 {
 	try {
-		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/i18n.fss' );
 		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	} catch( e ) {
-		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	}
-	var fileVersion = '0.9.1';
+	var fileVersion = '0.9.2';
 
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": [], "symbols": {}};
 	    fwJSON.fileVersion = fileVersion;
@@ -318,6 +316,12 @@
 	function getEffect( effectList ) {
 		var effects = {};
 		effects = getJavaScriptString( effectList );
+
+		var reg =  new RegExp( '[{}]', 'g' );
+		for (var i = effects.effects.length - 1; i >= 0; i--) {
+			var effectID = effects.effects[i].EffectMoaID.replace( reg, '' );
+			effects.effects[i].name = fw2jsonLib.liveEffects[effectID];
+		}
 
 		return effects;
 	}
