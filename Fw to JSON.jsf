@@ -42,7 +42,13 @@
 	fwJSON.documentSetting.pageCount = d.pagesCount;
 	fwJSON.documentSetting.docName = d.docTitleWithoutExtension || 'Untitled Document';
 
-	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	try {
+		var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	} catch( e ) {
+		alert( 'Please save first.' );
+		return false;
+	}
+	
 	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
 	if ( !exportDir ) {
 		alert( 'Canceled.' );
