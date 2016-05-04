@@ -566,7 +566,7 @@
 		for ( resName in collectFiles ) {
 			if ( false != collectFiles[resName].currentFilePath ) {
 				fw.openDocument( collectFiles[resName].currentFilePath, false, false );
-				console.log(  collectFiles[resName].currentFilePath );
+				// console.log(  collectFiles[resName].currentFilePath );
 				fw.getDocumentDOM().selectAll();
 				fw.getDocumentDOM().flattenSelection();
 				if ( 'texture' == collectFiles[resName].type ) {
