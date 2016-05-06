@@ -40,32 +40,38 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 ## JSON Format
 
-### Basic Attributes
+### Top Level Properties
 
 ```json
 {
 	"fileVersion": "1.0.0",
-	"documentSetting": {
-		"grid": {
-			"gridSize": {
-				"x": 36,
-				"y": 36
-			},
-			"gridOrigin": {
-				"x": 0,
-				"y": 0
-			}
-		},
-		"pageCount": 1,
-		"docName": "document name (without extension)"
-	},
+	"documentSetting": {},
 	"pages": [],
 	"symbols": {},
 	"resExportedDir": "fw2json-exported-document name"
 }
 ```
 
-### "pages" Attributes
+### "documentSetting" Properties
+
+```json
+"documentSetting": {
+	"grid": {
+		"gridSize": {
+			"x": 36,
+			"y": 36
+		},
+		"gridOrigin": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"pageCount": 1,
+	"docName": "document name (without extension)"
+}
+```
+
+### "pages" Properties
 
 ```json
 "pages": [{
@@ -81,19 +87,17 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 }]
 ```
 
-### "frames" Attribute
+### "frames" Properties
 
 ```json
 "frame": [
 	{
 		"toplayers": [{}]
-	},
-	{
-		"toplayers": [{}]
 	}
 ]
+```
 
-### "topLayers" Attributes
+### "topLayers" Properties
 
 ```json
 "topLayers": [{
@@ -103,13 +107,13 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	"visible": true,
 	"parentLayerNum": -1,
 	"hasChildren": true,
-	"elems": [{}]
+	"elems": []
 }]
 ```
 
-### "elems" Attributes
+### "elems" Properties
 
-#### "type = layer" Attributes
+#### "type = layer" Properties
 
 ```json
 "elems": [{
@@ -124,7 +128,7 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 `parentLayerNum`: Array index of parent layer. `-1` is topLayer.
 
-#### "type = rectangle" Attributes
+#### "type = rectangle" Properties
 
 ```json
 "elems": [{
@@ -149,10 +153,10 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 type
 
-#### "type = symbol" Attributes
+#### "type = symbol" Properties
 
 ```json
-{
+"elems": [{
 	"type": "symbol",
 	"name": "symbol inctance name",
 	"width": 100,
@@ -170,15 +174,15 @@ type
 		"bottom": 100
 	},
 	"symbolName": "symbol name",
-	"symbolID": "master579c4064",
-	"elements": "master579c4064__panelSymbol__252__345"
-}
+	"symbolID": "symbolID",
+	"elements": "key_name"
+}]
 ```
 
-#### "type = bitmap" Attributes
+#### "type = bitmap" Properties
 
 ```json
-{
+"elems": [{
 	"type": "bitmap",
 	"name": "bitmap layer name",
 	"width": 100,
@@ -196,13 +200,13 @@ type
 		"bottom": 100
 	},
 	"uri": "file:///path/to/resource-1.png"
-}
+}]
 ```
 
-#### "type = text" Attributes
+#### "type = text" Properties
 
 ```json
-{
+"elems": [{
 	"type": "text",
 	"name": "text layer name",
 	"width": 179,
@@ -256,13 +260,13 @@ type
 			"leading": 31.9
 		}
 	]
-}
+}]
 ```
 
-#### "type = group" Attributes
+#### "type = group" Properties
 
 ```json
-{
+"elems": [{
 	"type": "group",
 	"name": "group layer name",
 	"width": 100,
@@ -280,13 +284,13 @@ type
 		"bottom": 100
 	},
 	"elements": [{}]
-}
+}]
 ```
 
-#### "type = slice" Attributes
+#### "type = slice" Properties
 
 ```json
-{
+"elems": [{
 	"type": "slice",
 	"name": "slice layer name",
 	"width": 100,
@@ -308,13 +312,13 @@ type
 		"exportFormat": "PNG",
 		"jpegQuality": 80
 	}
-}
+}]
 ```
 
-#### "type = path" Attributes
+#### "type = path" Properties
 
 ```json
-{
+"elems": [{
 	"type": "path",
 	"name": "path",
 	"width": 1.9254150390625,
@@ -376,7 +380,7 @@ type
 		}
 	],
 	"effectList": {}
-}
+}]
 ```
 
 - rectangle
@@ -388,6 +392,206 @@ type
 - layer
 - bitmap
 - layer
+
+### "pathAttributes" Properties
+
+```json
+"pathAttributes": {
+	"brush": {
+		"alphaRemap": "none",
+		"angle": 0,
+		"antiAliased": false,
+		"aspect": 100,
+		"blackness": 38,
+		"category": "bc_Charcoal",
+		"concentration": 100,
+		"dashOffSize1": 4,
+		"dashOffSize2": 4,
+		"dashOffSize3": 4,
+		"dashOnSize1": 40,
+		"dashOnSize2": 2,
+		"dashOnSize3": 2,
+		"diameter": 3,
+		"feedback": "brush",
+		"flowRate": 0,
+		"maxCount": 14,
+		"minSize": 30,
+		"name": "bn_Creamy",
+		"numDashes": 0,
+		"sense_hdir_angle": 0,
+		"sense_hdir_blackness": 0,
+		"sense_hdir_hue": 0,
+		"sense_hdir_lightness": 0,
+		"sense_hdir_opacity": 0,
+		"sense_hdir_saturation": 0,
+		"sense_hdir_scatter": 0,
+		"sense_hdir_size": 0,
+		"sense_pressure_angle": 0,
+		"sense_pressure_blackness": 60.2,
+		"sense_pressure_hue": 0,
+		"sense_pressure_lightness": 0,
+		"sense_pressure_opacity": 50,
+		"sense_pressure_saturation": 0,
+		"sense_pressure_scatter": 9.4,
+		"sense_pressure_size": 89.8,
+		"sense_random_angle": 0,
+		"sense_random_blackness": 0,
+		"sense_random_hue": 0,
+		"sense_random_lightness": 0,
+		"sense_random_opacity": 0,
+		"sense_random_saturation": 0,
+		"sense_random_scatter": 6.3,
+		"sense_random_size": 0,
+		"sense_speed_angle": 0,
+		"sense_speed_blackness": 50,
+		"sense_speed_hue": 0,
+		"sense_speed_lightness": 0,
+		"sense_speed_opacity": 0,
+		"sense_speed_saturation": 0,
+		"sense_speed_scatter": 0,
+		"sense_speed_size": 79.7,
+		"sense_vdir_angle": 0,
+		"sense_vdir_blackness": 0,
+		"sense_vdir_hue": 0,
+		"sense_vdir_lightness": 0,
+		"sense_vdir_opacity": 0,
+		"sense_vdir_saturation": 0,
+		"sense_vdir_scatter": 0,
+		"sense_vdir_size": 0,
+		"shape": "circle",
+		"softenMode": "bell curve",
+		"softness": 0,
+		"spacing": 31,
+		"textureBlend": 36,
+		"textureEdge": 96,
+		"tipColoringMode": "random",
+		"tipCount": 4,
+		"tipSpacing": 0,
+		"tipSpacingMode": "random",
+		"type": "natural"
+	},
+	"brushColor": "#3d6b3a",
+	"brushPlacement": "center",
+	"brushTexture": {
+		"name": "DNA"
+	},
+	"fill": {
+		"category": "fc_Pattern",
+		"ditherColors": [
+			"#000000",
+			"#000000"
+		],
+		"edgeType": "antialiased",
+		"feather": 0,
+		"gradient": {},
+		"name": "パターン",
+		"pattern": {},
+		"shape": "pattern",
+		"stampingMode": "blend opaque",
+		"textureBlend": 0,
+		"webDitherTransparent": false
+	},
+	"fillColor": "#578199",
+	"fillHandle1": {
+		"x": 259.8141174316406,
+		"y": 613.6799926757812
+	},
+	"fillHandle2": {
+		"x": 270.8706359863281,
+		"y": 613.6762084960938
+	},
+	"fillHandle3": {
+		"x": 259.62554931640625,
+		"y": 585.099609375
+	},
+	"fillOnTop": false,
+	"fillTexture": {},
+	"fillType": "pattern"
+}
+```
+
+- `gradient`: [object|null]
+- `fillTexture`: [object|null]
+- `pattern`: [object|null]
+
+#### "gradient" Properties
+
+```json
+"gradient": {
+	"dither": false,
+	"name": "cn_BlackWhite",
+	"nodes": [
+		{
+			"color": "#ff0000",
+			"isOpacityNode": false,
+			"position": 0
+		},
+		{
+			"color": "#00ff00",
+			"isOpacityNode": false,
+			"position": 0.5
+		},
+		{
+			"color": "#0000ff",
+			"isOpacityNode": false,
+			"position": 1
+		}
+	],
+	"opacityNodes": [
+		{
+			"color": "#00000023",
+			"isOpacityNode": true,
+			"position": 0.19697000086307526
+		},
+		{
+			"color": "#000000",
+			"isOpacityNode": true,
+			"position": 0.5
+		},
+		{
+			"color": "#00000089",
+			"isOpacityNode": true,
+			"position": 0.8030300140380859
+		}
+	],
+	"gradientType": "linear"
+}
+```
+
+#### "fillTexture" Properties
+
+```json
+"fillTexture": {
+	"name": "Grid 4",
+	"filePath": "file:///path/to/resource/Grid_4.png",
+	"alias": "Grid_4"
+},
+```
+
+#### "pattern" Properties
+
+```json
+"pattern": {
+	"image": null,
+	"name": "Impressionist-Blue",
+	"patternURI": "file:///path/to/resource/resource-4.png",
+	"filePath": false,
+	"alias": "Impressionist_Blue"
+}
+```
+
+### "symbols" Properties
+
+```json
+"key_name": {
+	"symbolName": "Original Symbol Name",
+	"elements": [],
+	"width": 75,
+	"height": 75,
+	"top": 31,
+	"left": 387
+}
+```
 
 ## Lisence
 
