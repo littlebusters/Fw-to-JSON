@@ -52,337 +52,103 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 }
 ```
 
+-----
+
 ### "documentSetting" Properties
 
 ```json
-"documentSetting": {
-	"grid": {
-		"gridSize": {
-			"x": 36,
-			"y": 36
+{
+	"documentSetting": {
+		"grid": {
+			"gridSize": {
+				"x": 36,
+				"y": 36
+			},
+			"gridOrigin": {
+				"x": 0,
+				"y": 0
+			}
 		},
-		"gridOrigin": {
-			"x": 0,
-			"y": 0
-		}
-	},
-	"pageCount": 1,
-	"docName": "document name (without extension)"
+		"pageCount": 1,
+		"docName": "document name (without extension)"
+	}
 }
 ```
 
 ### "pages" Properties
 
 ```json
-"pages": [{
-	"pageName": "page name",
-	"backgroundColor": "#ffffff",
-	"width": 500,
-	"height": 500,
-	"guides": {
-		"x": [10, 20, 30],
-		"y": [50, 60]
-	},
-	"frames": []
-}]
+{
+	"pages": [
+		{
+			"pageName": "page name",
+			"backgroundColor": "#ffffff",
+			"width": 500,
+			"height": 500,
+			"guides": {
+				"x": [10, 20, 30],
+				"y": [50, 60]
+			},
+			"frames": []
+		}
+	]
+}
 ```
+
+### "symbols" Properties
+
+```json
+{
+	"key_name": {
+		"symbolName": "Original Symbol Name",
+		"width": 75,
+		"height": 75,
+		"top": 31,
+		"left": 387
+		"elements": [],
+	}
+}
+```
+
+* `elements`: same `elems`
+
+-----
 
 ### "frames" Properties
 
 ```json
-"frame": [
-	{
-		"toplayers": [{}]
-	}
-]
+{
+	"frame": [
+		{
+			"toplayers": [{}]
+		}
+	]
+}
 ```
+
+-----
 
 ### "topLayers" Properties
 
 ```json
-"topLayers": [{
-	"name": "layer name",
-	"type": "layer",
-	"locked": false,
-	"visible": true,
-	"parentLayerNum": -1,
-	"hasChildren": true,
-	"elems": []
-}]
-```
-
-### "elems" Properties
-
-#### "type = layer" Properties
-
-```json
-"elems": [{
-	"type": "layer",
-	"name": "layer name",
-	"visible": true,
-	"locked": false,
-	"parentLayerNum": -1,
-	"hasChildren": true
-}]
-```
-
-`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
-
-#### "type = rectangle" Properties
-
-```json
-"elems": [{
-	"type": "rectangle",
-	"name": "elems name",
-	"width": 100,
-	"height": 100,
-	"top": 300,
-	"left": 300,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 300,
-		"right": 400,
-		"top": 300,
-		"bottom": 400
-	}
-}]
-```
-
-type
-
-#### "type = symbol" Properties
-
-```json
-"elems": [{
-	"type": "symbol",
-	"name": "symbol inctance name",
-	"width": 100,
-	"height": 100,
-	"top": 0,
-	"left": 0,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 0,
-		"right": 100,
-		"top": 0,
-		"bottom": 100
-	},
-	"symbolName": "symbol name",
-	"symbolID": "symbolID",
-	"elements": "key_name"
-}]
-```
-
-#### "type = bitmap" Properties
-
-```json
-"elems": [{
-	"type": "bitmap",
-	"name": "bitmap layer name",
-	"width": 100,
-	"height": 100,
-	"top": 0,
-	"left": 0,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 0,
-		"right": 100,
-		"top": 0,
-		"bottom": 100
-	},
-	"uri": "file:///path/to/resource-1.png"
-}]
-```
-
-#### "type = text" Properties
-
-```json
-"elems": [{
-	"type": "text",
-	"name": "text layer name",
-	"width": 179,
-	"height": 17,
-	"top": 642,
-	"left": 123,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 125,
-		"right": 300,
-		"top": 646,
-		"bottom": 657
-	},
-	"pathAttributes": {},
-	"rawHeight": 13,
-	"rawWidth": 175,
-	"rawTop": 644,
-	"rawLeft": 125,
-	"autoExpand": true,
-	"antiAliasMode": "smooth",
-	"antiAliased": true,
-	"autoKern": true,
-	"orientation": "horizontal left to right",
-	"textChars": "text value",
-	"transform": {
-		"matrix": [1, 0, 0, 0, 1, 0, 0, 0, 1]
-	},
-	"fontFace": "Geometric415BT-MediumA",
-	"fontSize": "11",
-	"alignment": "right",
-	"underline": false,
-	"fillColor": "#5a3f35",
-	"baselineShift": 0,
-	"paragraphIndent": 0,
-	"paragraphSpacingBefore": 0,
-	"paragraphSpacingAfter": 0,
-	"leading": 31.9,
-	"textRuns": [
+{
+	"topLayers": [
 		{
-			"characters": "text value",
-			"size": "11",
-			"face": "Geometric415BT-MediumA",
-			"bold": false,
-			"italic": false,
-			"underline": false,
-			"fillColor": "#5a3f35",
-			"baselineShift": 0,
-			"leading": 31.9
+			"name": "layer name",
+			"type": "layer",
+			"locked": false,
+			"visible": true,
+			"parentLayerNum": -1,
+			"hasChildren": true,
+			"elems": []
 		}
 	]
-}]
+}
 ```
 
-#### "type = group" Properties
+### "elems" Properties (common properties)
 
-```json
-"elems": [{
-	"type": "group",
-	"name": "group layer name",
-	"width": 100,
-	"height": 100,
-	"top": 0,
-	"left": 0,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 0,
-		"right": 100,
-		"top": 0,
-		"bottom": 100
-	},
-	"elements": [{}]
-}]
-```
-
-#### "type = slice" Properties
-
-```json
-"elems": [{
-	"type": "slice",
-	"name": "slice layer name",
-	"width": 100,
-	"height": 100,
-	"top": 0,
-	"left": 0,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 0,
-		"right": 100,
-		"top": 0,
-		"bottom": 100
-	},
-	"baseName": "export name",
-	"exportOptions": {
-		"exportFormat": "PNG",
-		"jpegQuality": 80
-	}
-}]
-```
-
-#### "type = path" Properties
-
-```json
-"elems": [{
-	"type": "path",
-	"name": "path",
-	"width": 1.9254150390625,
-	"height": 3.3251953125,
-	"top": 583.602783203125,
-	"left": 342.29315185546875,
-	"blendMode": "normal",
-	"opacity": 100,
-	"visible": true,
-	"locked": false,
-	"pixelRect": {
-		"left": 342,
-		"right": 345,
-		"top": 583,
-		"bottom": 587
-	},
-	"pathAttributes": {},
-	"bezierPath": [
-		{
-			"isClosed": true,
-			"nodes": [
-				{
-					"isCurvePoint": false,
-					"x": 342.5592041015625,
-					"y": 585.4647216796875,
-					"succX": 342.5592041015625,
-					"succY": 585.4647216796875,
-					"predX": 342.5592041015625,
-					"predY": 585.4647216796875
-				},
-				{
-					"isCurvePoint": false,
-					"x": 343.86846923828125,
-					"y": 583.602783203125,
-					"succX": 343.86846923828125,
-					"succY": 583.602783203125,
-					"predX": 343.86846923828125,
-					"predY": 583.602783203125
-				},
-				{
-					"isCurvePoint": false,
-					"x": 344.21856689453125,
-					"y": 583.7606811523438,
-					"succX": 344.21856689453125,
-					"succY": 583.7606811523438,
-					"predX": 344.21856689453125,
-					"predY": 583.7606811523438
-				},
-				{
-					"isCurvePoint": false,
-					"x": 342.29315185546875,
-					"y": 586.927978515625,
-					"succX": 342.29315185546875,
-					"succY": 586.927978515625,
-					"predX": 342.29315185546875,
-					"predY": 586.927978515625
-				}
-			]
-		}
-	],
-	"effectList": {}
-}]
-```
-
+- layer
 - rectangle
 - text
 - path
@@ -391,12 +157,366 @@ type
 - slice
 - layer
 - bitmap
-- layer
+
+#### "type = layer" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "layer",
+			"name": "layer name",
+			"visible": true,
+			"locked": false,
+			"parentLayerNum": -1,
+			"hasChildren": true
+		}
+	]
+}
+```
+
+`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
+
+#### "type = rectangle" Properties (same common properties)
+
+```json
+{
+	"elems": [
+		{
+			"type": "rectangle",
+			"name": "elems name",
+			"width": 100,
+			"height": 100,
+			"top": 300,
+			"left": 300,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 300,
+				"right": 400,
+				"top": 300,
+				"bottom": 400
+			},
+			"transform": {
+				"matrix": [1, 0, 0, 0, 1, 0, 0, 0, 1]
+			},
+			"pathAttributes": {},
+			"effectList": {},
+			"mask": {}
+		}
+	]
+}
+```
+
+* `pathAttributes`: [object]
+* `effectList`: [object|null]
+* `mask`: [object|null]
+
+#### "type = symbol" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "symbol",
+			"name": "symbol instance name",
+			"width": 100,
+			"height": 100,
+			"top": 0,
+			"left": 0,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 0,
+				"right": 100,
+				"top": 0,
+				"bottom": 100
+			},
+			"symbolName": "symbol name",
+			"symbolID": "symbolID",
+			"elements": "key_name"
+		}
+	]
+}
+```
+
+#### "type = bitmap" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "bitmap",
+			"name": "bitmap layer name",
+			"width": 100,
+			"height": 100,
+			"top": 0,
+			"left": 0,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 0,
+				"right": 100,
+				"top": 0,
+				"bottom": 100
+			},
+			"uri": "file:///path/to/resource-1.png"
+		}
+	]
+}
+```
+
+#### "type = text" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "text",
+			"name": "text layer name",
+			"width": 179,
+			"height": 17,
+			"top": 642,
+			"left": 123,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 125,
+				"right": 300,
+				"top": 646,
+				"bottom": 657
+			},
+			"transform": {
+				"matrix": [1, 0, 0, 0, 1, 0, 0, 0, 1]
+			},
+			"pathAttributes": {},
+			"effectList": {},
+			"mask": {},
+			"rawHeight": 13,
+			"rawWidth": 175,
+			"rawTop": 644,
+			"rawLeft": 125,
+			"autoExpand": true,
+			"antiAliasMode": "smooth",
+			"antiAliased": true,
+			"autoKern": true,
+			"orientation": "horizontal left to right",
+			"textChars": "text value",
+			"fontFace": "AvenirNext-Bold",
+			"fontSize": "11",
+			"alignment": "right",
+			"underline": false,
+			"fillColor": "#5a3f35",
+			"baselineShift": 0,
+			"paragraphIndent": 0,
+			"paragraphSpacingBefore": 0,
+			"paragraphSpacingAfter": 0,
+			"leading": 31.9,
+			"textRuns": [
+				{
+					"characters": "text value",
+					"size": "11",
+					"face": "AvenirNext-Bold",
+					"bold": false,
+					"italic": false,
+					"underline": false,
+					"fillColor": "#5a3f35",
+					"baselineShift": 0,
+					"leading": 31.9
+				}
+			]
+		}
+	]
+}
+```
+
+#### "type = group" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "group",
+			"name": "group layer name",
+			"width": 100,
+			"height": 100,
+			"top": 0,
+			"left": 0,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 0,
+				"right": 100,
+				"top": 0,
+				"bottom": 100
+			},
+			"effectList": {},
+			"mask": {},
+			"elements": []
+		}
+	]
+}
+```
+
+* `elements`: same `elmes` properties
+
+#### "type = slice" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "slice",
+			"name": "slice layer name",
+			"width": 100,
+			"height": 100,
+			"top": 0,
+			"left": 0,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 0,
+				"right": 100,
+				"top": 0,
+				"bottom": 100
+			},
+			"baseName": "export name",
+			"exportOptions": {
+				"exportFormat": "PNG",
+				"jpegQuality": 80
+			}
+		}
+	]
+}
+```
+
+#### "type = path" Properties
+
+```json
+{
+	"elems": [
+		{
+			"type": "path",
+			"name": "path",
+			"width": 1.9254150390625,
+			"height": 3.3251953125,
+			"top": 583.602783203125,
+			"left": 342.29315185546875,
+			"blendMode": "normal",
+			"opacity": 100,
+			"visible": true,
+			"locked": false,
+			"pixelRect": {
+				"left": 342,
+				"right": 345,
+				"top": 583,
+				"bottom": 587
+			},
+			"pathAttributes": {},
+			"effectList": {},
+			"mask": {},
+			"bezierPath": [
+				{
+					"isClosed": true,
+					"nodes": [
+						{
+							"isCurvePoint": false,
+							"x": 342.5592041015625,
+							"y": 585.4647216796875,
+							"succX": 342.5592041015625,
+							"succY": 585.4647216796875,
+							"predX": 342.5592041015625,
+							"predY": 585.4647216796875
+						},
+						{
+							"isCurvePoint": false,
+							"x": 343.86846923828125,
+							"y": 583.602783203125,
+							"succX": 343.86846923828125,
+							"succY": 583.602783203125,
+							"predX": 343.86846923828125,
+							"predY": 583.602783203125
+						},
+						{
+							"isCurvePoint": false,
+							"x": 344.21856689453125,
+							"y": 583.7606811523438,
+							"succX": 344.21856689453125,
+							"succY": 583.7606811523438,
+							"predX": 344.21856689453125,
+							"predY": 583.7606811523438
+						},
+						{
+							"isCurvePoint": false,
+							"x": 342.29315185546875,
+							"y": 586.927978515625,
+							"succX": 342.29315185546875,
+							"succY": 586.927978515625,
+							"predX": 342.29315185546875,
+							"predY": 586.927978515625
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
 
 ### "pathAttributes" Properties
 
 ```json
-"pathAttributes": {
+{
+	"pathAttributes": {
+		"brush": {},
+		"brushColor": "#3d6b3a",
+		"brushPlacement": "center",
+		"brushTexture": {},
+		"fill": {},
+		"fillColor": "#578199",
+		"fillHandle1": {
+			"x": 259.8141174316406,
+			"y": 613.6799926757812
+		},
+		"fillHandle2": {
+			"x": 270.8706359863281,
+			"y": 613.6762084960938
+		},
+		"fillHandle3": {
+			"x": 259.62554931640625,
+			"y": 585.099609375
+		},
+		"fillOnTop": false,
+		"fillType": "pattern"
+		"fillTexture": {},
+	}
+}
+```
+
+* `brush`: [object|null]
+* `brushColor`: [#RRGGBB|#RRGGBBAA]
+* `brushTexture`: [object|null]
+* `fill`: [object|null]
+* `fillColor`: [#RRGGBB|#RRGGBBAA]
+* `fillTexture`: [object|null]
+* `fillType`: [flat|gradient|pattern|null]
+
+#### "brush" Properties
+
+```json
+{
 	"brush": {
 		"alphaRemap": "none",
 		"angle": 0,
@@ -469,12 +589,14 @@ type
 		"tipSpacing": 0,
 		"tipSpacingMode": "random",
 		"type": "natural"
-	},
-	"brushColor": "#3d6b3a",
-	"brushPlacement": "center",
-	"brushTexture": {
-		"name": "DNA"
-	},
+	}
+}
+```
+
+#### "fill" Properties
+
+```json
+{
 	"fill": {
 		"category": "fc_Pattern",
 		"ditherColors": [
@@ -484,112 +606,99 @@ type
 		"edgeType": "antialiased",
 		"feather": 0,
 		"gradient": {},
-		"name": "パターン",
+		"name": "pattern",
 		"pattern": {},
 		"shape": "pattern",
 		"stampingMode": "blend opaque",
 		"textureBlend": 0,
 		"webDitherTransparent": false
-	},
-	"fillColor": "#578199",
-	"fillHandle1": {
-		"x": 259.8141174316406,
-		"y": 613.6799926757812
-	},
-	"fillHandle2": {
-		"x": 270.8706359863281,
-		"y": 613.6762084960938
-	},
-	"fillHandle3": {
-		"x": 259.62554931640625,
-		"y": 585.099609375
-	},
-	"fillOnTop": false,
-	"fillTexture": {},
-	"fillType": "pattern"
+	}
 }
 ```
 
-- `gradient`: [object|null]
-- `fillTexture`: [object|null]
-- `pattern`: [object|null]
+* `gradient`: [object|null]
+* `pattern`: [object|null]
 
-#### "gradient" Properties
+##### "gradient" Properties
 
 ```json
-"gradient": {
-	"dither": false,
-	"name": "cn_BlackWhite",
-	"nodes": [
-		{
-			"color": "#ff0000",
-			"isOpacityNode": false,
-			"position": 0
-		},
-		{
-			"color": "#00ff00",
-			"isOpacityNode": false,
-			"position": 0.5
-		},
-		{
-			"color": "#0000ff",
-			"isOpacityNode": false,
-			"position": 1
-		}
-	],
-	"opacityNodes": [
-		{
-			"color": "#00000023",
-			"isOpacityNode": true,
-			"position": 0.19697000086307526
-		},
-		{
-			"color": "#000000",
-			"isOpacityNode": true,
-			"position": 0.5
-		},
-		{
-			"color": "#00000089",
-			"isOpacityNode": true,
-			"position": 0.8030300140380859
-		}
-	],
-	"gradientType": "linear"
+{
+	"gradient": {
+		"dither": false,
+		"name": "cn_BlackWhite",
+		"nodes": [
+			{
+				"color": "#ff0000",
+				"isOpacityNode": false,
+				"position": 0
+			},
+			{
+				"color": "#00ff00",
+				"isOpacityNode": false,
+				"position": 0.5
+			},
+			{
+				"color": "#0000ff",
+				"isOpacityNode": false,
+				"position": 1
+			}
+		],
+		"opacityNodes": [
+			{
+				"color": "#00000023",
+				"isOpacityNode": true,
+				"position": 0.19697000086307526
+			},
+			{
+				"color": "#000000",
+				"isOpacityNode": true,
+				"position": 0.5
+			},
+			{
+				"color": "#00000089",
+				"isOpacityNode": true,
+				"position": 0.8030300140380859
+			}
+		],
+		"gradientType": "linear"
+	}
 }
 ```
 
-#### "fillTexture" Properties
+##### "pattern" Properties
 
 ```json
-"fillTexture": {
-	"name": "Grid 4",
-	"filePath": "file:///path/to/resource/Grid_4.png",
-	"alias": "Grid_4"
-},
-```
-
-#### "pattern" Properties
-
-```json
-"pattern": {
-	"image": null,
-	"name": "Impressionist-Blue",
-	"patternURI": "file:///path/to/resource/resource-4.png",
-	"filePath": false,
-	"alias": "Impressionist_Blue"
+{
+	"pattern": {
+		"image": null,
+		"name": "Impressionist-Blue",
+		"patternURI": "file:///path/to/resource/resource-1.png",
+		"filePath": false,
+		"alias": "Impressionist_Blue"
+	}
 }
 ```
 
-### "symbols" Properties
+##### "fillTexture" Properties
 
 ```json
-"key_name": {
-	"symbolName": "Original Symbol Name",
-	"elements": [],
-	"width": 75,
-	"height": 75,
-	"top": 31,
-	"left": 387
+{
+	"fillTexture": {
+		"name": "Grid 4",
+		"filePath": "file:///path/to/resource/Grid_4.png",
+		"alias": "Grid_4"
+	}
+}
+```
+
+### "mask" Properties
+
+```json
+{
+	"mask": {
+		"mode": "mask to image",
+		"element": []
+	}
 }
 ```
 
