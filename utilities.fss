@@ -108,3 +108,31 @@ fw2jsonLib.defaultPatterns = {};
 	fw2jsonLib.defaultPatterns['Wood_2'] = 'Wood 2.jpg';
 	fw2jsonLib.defaultPatterns['Wood_3'] = 'Wood 3.jpg';
 	fw2jsonLib.defaultPatterns['Wood'] = 'Wood.jpg';
+
+fw2jsonLib.liveEffects = {
+	'7fe61102-6ce2-11d1-8c76000502701850': 'glow',
+	'5600f702-774c-11d3-baad0000861f4d01': 'inner shadow',
+	'b90c950e-64df-11d8-aaf2000a9582f7d4': 'solid shadow',
+	'a7944db8-6ce2-11d1-8c76000502701850': 'drop shadow',
+	'2ba87123-8220-11d3-baad0000861f4d01': 'inner glow',
+	'2932d5a2-ca48-11d1-8561000502701850': 'convert to alpha',
+	'fc7093f1-f95c-11d0-8be200a024cdc039': 'find edges',
+	'f1cfce41-718e-11d1-8c8200a024cdc039': 'blur',
+	'f1cfce42-718e-11d1-8c8200a024cdc039': 'blur more',
+	'd04ef8c0-71b3-11d1-8c8200a024cdc039': 'gaussian blur',
+	'94dbd663-9b2e-44bf-8064ab6efdd2d327': 'zoom blur',
+	'd1c33142-2ad8-4215-a39fc5d934c8fc0c': 'radial blur',
+	'538016b6-ffd6-418f-a10c590e6ee841ae': 'motion blur',
+	'dd54adc0-a279-11d3-b92a000502f3fdbe': 'color fill',
+	'3439b08e-1923-11d3-9bde00e02910d580': 'curves',
+	'd04ef8c2-71b5-11d1-8c8200a024cdc039': 'levels',
+	'd2541291-70d6-11d1-8c8000a024cdc039': 'Invert',
+	'3439b08c-1921-11d3-9bde00e02910d580': 'brightness/contrast',
+	'd04ef8c1-71b4-11d1-8c8200a024cdc039': 'auto aevel',
+	'3439b08d-1922-11d3-9bde00e02910d580': 'hue/saturation',
+	'f1cfce44-718e-11d1-8c8200a024cdc039': 'unsharp mask',
+	'c20952b1-fc76-11d0-8be700a024cdc039': 'sharpen',
+	'1f2f2591-9db7-11d1-8cad00a024cdc039': 'sharpen more',
+	'e4c0f4bc-c0a3-4cb3-b3513822027e4d9f': 'add noise',
+	'8eeadf50-9efe-11da-a7460800200c9a66': 'photoshop live effects'
+};

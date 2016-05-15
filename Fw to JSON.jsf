@@ -7,13 +7,11 @@
 (function()
 {
 	try {
-		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/i18n.fss' );
 		fw.runScript( fw.userJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	} catch( e ) {
-		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/i18n.fss' );
 		fw.runScript( fw.appJsCommandsDir + '/Fw to JSON/utilities.fss' );
 	}
-	var fileVersion = '0.9.1';
+	var fileVersion = '0.9.3';
 
 	var fwJSON = {"documentSetting": {"grid" : {}}, "pages": [], "symbols": {}};
 	    fwJSON.fileVersion = fileVersion;
@@ -33,7 +31,7 @@
 		"[object FwArray]": "layer"
 	}
 	var exportLayers;
-	var textureCollectFileURLs = {};
+	var resCollectFileURLs = {};
 	var dirSeparator = ( 'mac' == fw.platform ) ? '/' : '\\';
 	var documentSymbols = {}
 
@@ -42,7 +40,13 @@
 	fwJSON.documentSetting.pageCount = d.pagesCount;
 	fwJSON.documentSetting.docName = d.docTitleWithoutExtension || 'Untitled Document';
 
-	var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	try {
+		var currentFilePath = d.filePathForSave.slice( 0, d.filePathForSave.lastIndexOf( '/' ) + 1 );
+	} catch( e ) {
+		alert( 'Please save first.' );
+		return false;
+	}
+	
 	var exportDir = fw.browseForFolderURL( 'Choose Export Folder', currentFilePath);
 	if ( !exportDir ) {
 		alert( 'Canceled.' );
@@ -107,9 +111,9 @@
 		};
 	};
 
-	var textureCount         = 0;
-	var textureNotFoundCount = 0;
-	collectResourceFiles( textureCollectFileURLs );
+	var resourceCounter         = 0;
+	var resourceNotFoundCounter = 0;
+	collectResourceFiles( resCollectFileURLs );
 
 	var FwJSONstr = fwJSON.toSource();
 	var reg = new RegExp( /(\{)([\w_]+):|( )([\w_]+):/g );
@@ -144,13 +148,13 @@
 	    msg += '\r--\r' + d.pagesCount + ' page(s).';
 	    ( 1 < frameCount ) ? msg += '\r' + frameCount + ' frame(s).' : '';
 	    msg += '\r' + objectCount + ' objects (include layers).';
-	if ( 1 == bitmapCounter && 0 == textureCount ) {
+	if ( 1 == bitmapCounter && 0 == resourceCounter ) {
 		Files.deleteFileIfExisting ( bitmapExportDir );
 	} else {
 		( 1 < bitmapCounter ) ? msg += '\r' + ( bitmapCounter - 1 ) + ' bitmap(s) and patterned fill(s).' : '';
 		( 0 < symbolCount ) ? msg += '\r' + symbolCount + ' symbol(s) (include symbol of different boundary).' : '';
-		( 0 < textureCount ) ? msg += '\r' + textureCount + ' texture(s).' : '';
-		( 0 < textureNotFoundCount ) ? msg += '\r' + textureNotFoundCount + ' texture(s) not found.' : '';
+		( 0 < resourceCounter ) ? msg += '\r' + resourceCounter + ' pattern(s) and texture(s).' : '';
+		( 0 < resourceNotFoundCounter ) ? msg += '\r' + resourceNotFoundCounter + ' pattern(s) and texture(s) not found.' : '';
 	}
 
 	alert( msg );
@@ -279,6 +283,10 @@
 						d.detachInstanceFromSymbol();
 						var sel = fw.selection[0];
 						fwJSON.symbols[symbolID].elements = getElemAttrs( sel.elements );
+						fwJSON.symbols[symbolID].width = sel.width;
+						fwJSON.symbols[symbolID].height = sel.height;
+						fwJSON.symbols[symbolID].top = sel.top;
+						fwJSON.symbols[symbolID].left = sel.left;
 						symbolCount++;
 					}
 				}
@@ -313,6 +321,12 @@
 		var effects = {};
 		effects = getJavaScriptString( effectList );
 
+		var reg =  new RegExp( '[{}]', 'g' );
+		for (var i = effects.effects.length - 1; i >= 0; i--) {
+			var effectID = effects.effects[i].EffectMoaID.replace( reg, '' );
+			effects.effects[i].name = fw2jsonLib.liveEffects[effectID];
+		}
+
 		return effects;
 	}
 
@@ -337,7 +351,7 @@
 		if ( '[object Text]' == element.toString() ) {
 			var objectName = element.textChars + '-' + bitmapCounter++;
 		} else {
-			var objectName = ( element.name ) ? element.name + '-' + bitmapCounter++ : 'unnamedObject-' + bitmapCounter++;
+			var objectName = ( element.name ) ? element.name + '-' + bitmapCounter++ : 'resource-' + bitmapCounter++;
 		}
 		var savePath = bitmapExportDir + objectName + '.png';
 		exportLayers.push( {element: element, path: savePath} );
@@ -495,58 +509,75 @@
 			}
 			if ( null != attrs.fill.pattern ) {
 				attrs.fill.pattern.patternURI = createExportPath( element );
+				attrs.fill.pattern.name = attrs.fill.pattern.name.replace( /[:\\]/g, '/' );
+				attrs.fill.pattern = setCollectResAttrs( attrs.fill.pattern, 'pattern' );
 				attrs.fillType = 'pattern';
 			}
 			if ( 0 < attrs.fill.textureBlend ) {
 				attrs.fillTexture.name = attrs.fillTexture.name.replace( /[:\\]/g, '/' );
-				attrs.fillTexture = collectTexture( attrs.fillTexture );
+				attrs.fillTexture = setCollectResAttrs( attrs.fillTexture, 'texture' );
 			}
 		}
 
 		return attrs;
 	}
 
-	function collectTexture ( texture ) {
+	function setCollectResAttrs ( res, type ) {
 		// console.log( '-> start' );
 
-		if ( -1 != texture.name.search( dirSeparator ) ) {
-			var openURL = 'file:///' + texture.name.replace( /[:\\]/g, '/' );
+		switch ( type ) {
+			case 'pattern':
+				var appDir = fw.appPatternsDir;
+				break;
+			case 'texture':
+				var appDir = fw.appTexturesDir;
+				break;
+			default:
+				var appDir = fw.appTexturesDir;
+				break;
+		}
+
+		if ( -1 != res.name.search( dirSeparator ) ) {
+			var openURL = 'file:///' + res.name.replace( /[:\\]/g, '/' );
 			openURL = openURL.replace( / /g, '%20' );
-			var separatedPath = texture.name.split( dirSeparator );
-			var textureName = separatedPath[separatedPath.length - 1].replace( /[- ]/g, '_' );
+			var separatedPath = res.name.split( dirSeparator );
+			var resName = separatedPath[separatedPath.length - 1].replace( /[- ]/g, '_' );
 		} else {
-			var textureName = texture.name.replace( /[- ]/, '_' );
-			var openURL = fw.appTexturesDir + '/' + fw2jsonLib.defaultTextures[textureName];
+			var resName = res.name.replace( /[- ]/, '_' );
+			var openURL = appDir + '/' + fw2jsonLib.defaultTextures[resName];
 		}
 
-		textureCollectFileURLs[textureName] = {};
+		resCollectFileURLs[resName] = {};
 		if ( Files.exists( openURL ) ) {
-			texture.filePath = bitmapExportDir + textureName + '.png';
-			textureCollectFileURLs[textureName].currentFilePath = openURL;
-			textureCollectFileURLs[textureName].savePath = texture.filePath;
+			res.filePath = bitmapExportDir + resName + '.png';
+			resCollectFileURLs[resName].currentFilePath = openURL;
+			resCollectFileURLs[resName].savePath = res.filePath;
 		} else {
-			texture.filePath = false;
-			textureCollectFileURLs[textureName].currentFilePath = false;
-			textureCollectFileURLs[textureName].savePath = texture.filePath;
+			res.filePath = false;
+			resCollectFileURLs[resName].currentFilePath = false;
+			resCollectFileURLs[resName].savePath = res.filePath;
 		}
-		texture.alias = textureName;
+		res.alias = resName;
 
-		return texture;
+		return res;
 	}
 
-	function collectResourceFiles ( collectFiles, type ) {
-		for ( textureName in collectFiles ) {
-			if ( false != collectFiles[textureName].currentFilePath ) {
-				fw.openDocument( collectFiles[textureName].currentFilePath, false, false );
+	function collectResourceFiles ( collectFiles ) {
+		for ( resName in collectFiles ) {
+			if ( false != collectFiles[resName].currentFilePath ) {
+				fw.openDocument( collectFiles[resName].currentFilePath, false, false );
+				// console.log(  collectFiles[resName].currentFilePath );
 				fw.getDocumentDOM().selectAll();
 				fw.getDocumentDOM().flattenSelection();
-				fw.getDocumentDOM().filterSelection({ EffectIsVisible:true, EffectMoaID:"{3439b08d-1922-11d3-9bde00e02910d580}", MB_filter_preview_tile_size:"-1 -1", hls_colorize:false, hue_amount:0, lightness_amount:0, saturation_amount:-100 });
-				fw.getDocumentDOM().filterSelection({ EffectMoaID:"{d2541291-70d6-11d1-8c8000a024cdc039}", MB_filter_preview_tile_size:"-1 -1" });
-				fw.saveAs( null, collectFiles[textureName].savePath, false );
+				if ( 'texture' == collectFiles[resName].type ) {
+					fw.getDocumentDOM().filterSelection({ EffectIsVisible:true, EffectMoaID:"{3439b08d-1922-11d3-9bde00e02910d580}", MB_filter_preview_tile_size:"-1 -1", hls_colorize:false, hue_amount:0, lightness_amount:0, saturation_amount:-100 });
+					fw.getDocumentDOM().filterSelection({ EffectMoaID:"{d2541291-70d6-11d1-8c8000a024cdc039}", MB_filter_preview_tile_size:"-1 -1" });
+				}
+				fw.saveAs( null, collectFiles[resName].savePath, false );
 				fw.getDocumentDOM().close( false );
-				textureCount++;
+				resourceCounter++;
 			} else {
-				textureNotFoundCount++;
+				resourceNotFoundCounter++;
 			}
 		}
 	}
