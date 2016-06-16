@@ -14,7 +14,7 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 OSX
 
 ```
-"/Users/[USERNAME]/Library/Application Support/Adobe/Fireworks CS6/Commands"
+"~/Library/Application Support/Adobe/Fireworks CS6/Commands"
 ```
 
 Windows
