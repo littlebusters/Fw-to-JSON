@@ -5,6 +5,8 @@ This command can export structure of the Fireworks PNG as a JSON file.
 
 **I have not test on Windows.** Please send a report.
 
+TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
+
 ## Instllation
 
 Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks "Commands" folder.
@@ -16,10 +18,11 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 1. Select export folder.
 1. Export completion when displayed alert.
 
-**You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
-
 ## Note
 
+- **You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
+- If you have installed "Fireworks Console" and "DOM Inspector", Please disable.
+- Please you use this command with saved the document.
 - This command looks for the original texture and pattern file.
 - Patterned fill is exported as Fireworks PNG file.
 - Bitmap export as it is.
@@ -37,8 +40,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	"resExportedDir": "fw2json-exported-document name"
 }
 ```
-
------
 
 ### "documentSetting" Properties
 
@@ -83,6 +84,8 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 
 ### "symbols" Properties
 
+* `elements`: same `elems`
+
 ```json
 {
 	"key_name": {
@@ -96,10 +99,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 }
 ```
 
-* `elements`: same `elems`
-
------
-
 ### "frames" Properties
 
 ```json
@@ -111,8 +110,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	]
 }
 ```
-
------
 
 ### "topLayers" Properties
 
@@ -146,6 +143,8 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 
 #### "type = layer" Properties
 
+`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
+
 ```json
 {
 	"elems": [
@@ -161,9 +160,11 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 }
 ```
 
-`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
-
 #### "type = rectangle" Properties (same common properties)
+
+* `pathAttributes`: [object]
+* `effectList`: [object|null]
+* `mask`: [object|null]
 
 ```json
 {
@@ -195,10 +196,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	]
 }
 ```
-
-* `pathAttributes`: [object]
-* `effectList`: [object|null]
-* `mask`: [object|null]
 
 #### "type = symbol" Properties
 
@@ -326,6 +323,8 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 
 #### "type = group" Properties
 
+* `elements`: same `elmes` properties
+
 ```json
 {
 	"elems": [
@@ -353,8 +352,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	]
 }
 ```
-
-* `elements`: same `elmes` properties
 
 #### "type = slice" Properties
 
@@ -463,6 +460,14 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 
 ### "pathAttributes" Properties
 
+* `brush`: [object|null]
+* `brushColor`: [#RRGGBB|#RRGGBBAA]
+* `brushTexture`: [object|null]
+* `fill`: [object|null]
+* `fillColor`: [#RRGGBB|#RRGGBBAA]
+* `fillTexture`: [object|null]
+* `fillType`: [flat|gradient|pattern|null]
+
 ```json
 {
 	"pathAttributes": {
@@ -490,14 +495,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	}
 }
 ```
-
-* `brush`: [object|null]
-* `brushColor`: [#RRGGBB|#RRGGBBAA]
-* `brushTexture`: [object|null]
-* `fill`: [object|null]
-* `fillColor`: [#RRGGBB|#RRGGBBAA]
-* `fillTexture`: [object|null]
-* `fillType`: [flat|gradient|pattern|null]
 
 #### "brush" Properties
 
@@ -581,6 +578,9 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 
 #### "fill" Properties
 
+* `gradient`: [object|null]
+* `pattern`: [object|null]
+
 ```json
 {
 	"fill": {
@@ -601,9 +601,6 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 	}
 }
 ```
-
-* `gradient`: [object|null]
-* `pattern`: [object|null]
 
 ##### "gradient" Properties
 
@@ -688,6 +685,10 @@ Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks 
 }
 ```
 
+## Bug reports
+
+1. Submit via Github issues with the version of your OS and Fireworks.
+
 ## Lisence
 
-The MIT License (MIT)
+This software is released under the MIT License, see LICENSE.
