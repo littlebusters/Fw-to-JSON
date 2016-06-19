@@ -9,20 +9,6 @@ This command can export structure of the Fireworks PNG as a JSON file.
 
 Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks "Commands" folder.
 
-### Commands folder location
-
-OSX
-
-```
-"~/Library/Application Support/Adobe/Fireworks CS6/Commands"
-```
-
-Windows
-
-```
-C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
-```
-
 ## Usage
 
 1. Open the Firworks document.
