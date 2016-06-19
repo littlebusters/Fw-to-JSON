@@ -84,7 +84,7 @@
 		sceneLayerIndex = 0;
 
 		fwJSON.pages[pageIndex] = {};
-		fwJSON.pages[pageIndex].pageName = d.pageName;
+		fwJSON.pages[pageIndex].pageName = escape( d.pageName );
 		fwJSON.pages[pageIndex].backgroundColor = d.backgroundColor;
 		fwJSON.pages[pageIndex].width = d.width;
 		fwJSON.pages[pageIndex].height = d.height;
@@ -166,7 +166,7 @@
 
 		for ( var layerIndex = 0; layerIndex < topLayers.length; layerIndex++ ) {
 			layerData[layerIndex] = {};
-			layerData[layerIndex].name = topLayers[layerIndex].name;
+			layerData[layerIndex].name = escape( topLayers[layerIndex].name );
 			layerData[layerIndex].type = layerType[topLayers[layerIndex].toString()];
 			layerData[layerIndex].locked = d.frames[frameIndex].layers[sceneLayerIndex].locked;
 			layerData[layerIndex].visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
@@ -190,7 +190,7 @@
 		// console.log( '-> start', 'F:', frameIndex, 'L:', sceneLayerIndex );
 		var layerData = {};
 
-		layerData.name = layer.name;
+		layerData.name = escape( layer.name );
 		layerData.type = layerType[layer.toString()];
 		layerData.locked = d.frames[frameIndex].layers[sceneLayerIndex].locked;
 		layerData.visible = d.frames[frameIndex].layers[sceneLayerIndex].visible;
@@ -217,7 +217,7 @@
 			if ( '[object Layer]' != elements[childIndex].toString() ) {
 				elemData[elemIndex] = {};
 				elemData[elemIndex].type = layerType[elements[childIndex].toString()];
-				elemData[elemIndex].name = elements[childIndex].name || elemData[elemIndex].type;
+				elemData[elemIndex].name = escape( elements[childIndex].name ) || elemData[elemIndex].type;
 				elemData[elemIndex].width = elements[childIndex].width;
 				elemData[elemIndex].height = elements[childIndex].height;
 				elemData[elemIndex].top = elements[childIndex].top;
@@ -239,7 +239,7 @@
 				{
 					elemData[elemIndex].pathAttributes = getPathAttributes( elements[childIndex] );
 				} else if ( 'slice' == elemData[elemIndex].type ) {
-					elemData[elemIndex].baseName = elements[childIndex].baseName || elemData[elemIndex].type;
+					elemData[elemIndex].baseName = escape( elements[childIndex].baseName ) || elemData[elemIndex].type;
 					if ( null == elements[childIndex].exportOptions ) {
 						elemData[elemIndex].exportOptions = getExportOptions( d.exportOptions );
 					} else {
@@ -259,7 +259,7 @@
 					elemData[elemIndex].mask = getMaskAttrs( elements[childIndex].mask );
 				}
 				if ( 'symbol' == elemData[elemIndex].type ) {
-					elemData[elemIndex].symbolName = elements[childIndex].symbolName;
+					elemData[elemIndex].symbolName = escape( elements[childIndex].symbolName );
 					elemData[elemIndex].symbolID = elements[childIndex].symbolID;
 
 					var symbolID = elements[childIndex].symbolID + '__'
@@ -408,7 +408,7 @@
 		attrs.antiAliased   = element.antiAliased;
 		attrs.autoKern      = element.autoKern;
 		attrs.orientation   = element.orientation;
-		attrs.textChars     = element.textChars + '';
+		attrs.textChars     = escape( element.textChars ) + '';
 		attrs.transform = {"matrix": []};
 		for ( var i = element.transform.matrix.length - 1; i >= 0; i-- ) {
 			attrs.transform.matrix[i] = element.transform.matrix[i];
@@ -438,7 +438,7 @@
 		if ( null != element.textRuns.textRuns ) {
 			for ( var i = element.textRuns.textRuns.length - 1; i >= 0; i-- ) {
 				attrs.textRuns[i] = {};
-				attrs.textRuns[i].characters = element.textRuns.textRuns[i].characters + '';
+				attrs.textRuns[i].characters = escape( element.textRuns.textRuns[i].characters ) + '';
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( ':', '\\:' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\n', '\n' );
 				attrs.textRuns[i].characters = attrs.textRuns[i].characters.replace( '\r', '\r' );
