@@ -5,23 +5,11 @@ This command can export structure of the Fireworks PNG as a JSON file.
 
 **I have not test on Windows.** Please send a report.
 
+TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
+
 ## Instllation
 
 Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks "Commands" folder.
-
-### Commands folder location
-
-OSX
-
-```
-"/Users/[USERNAME]/Library/Application Support/Adobe/Fireworks CS6/Commands"
-```
-
-Windows
-
-```
-C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
-```
 
 ## Usage
 
@@ -30,10 +18,11 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 1. Select export folder.
 1. Export completion when displayed alert.
 
-**You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
-
 ## Note
 
+- **You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
+- If you have installed "Fireworks Console" and "DOM Inspector", Please disable.
+- Please you use this command with saved the document.
 - This command looks for the original texture and pattern file.
 - Patterned fill is exported as Fireworks PNG file.
 - Bitmap export as it is.
@@ -51,8 +40,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	"resExportedDir": "fw2json-exported-document name"
 }
 ```
-
------
 
 ### "documentSetting" Properties
 
@@ -97,6 +84,8 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 ### "symbols" Properties
 
+* `elements`: same `elems`
+
 ```json
 {
 	"key_name": {
@@ -110,10 +99,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 }
 ```
 
-* `elements`: same `elems`
-
------
-
 ### "frames" Properties
 
 ```json
@@ -125,8 +110,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	]
 }
 ```
-
------
 
 ### "topLayers" Properties
 
@@ -160,6 +143,8 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 #### "type = layer" Properties
 
+`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
+
 ```json
 {
 	"elems": [
@@ -175,9 +160,11 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 }
 ```
 
-`parentLayerNum`: Array index of parent layer. `-1` is topLayer.
-
 #### "type = rectangle" Properties (same common properties)
+
+* `pathAttributes`: [object]
+* `effectList`: [object|null]
+* `mask`: [object|null]
 
 ```json
 {
@@ -209,10 +196,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	]
 }
 ```
-
-* `pathAttributes`: [object]
-* `effectList`: [object|null]
-* `mask`: [object|null]
 
 #### "type = symbol" Properties
 
@@ -340,6 +323,8 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 #### "type = group" Properties
 
+* `elements`: same `elmes` properties
+
 ```json
 {
 	"elems": [
@@ -367,8 +352,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	]
 }
 ```
-
-* `elements`: same `elmes` properties
 
 #### "type = slice" Properties
 
@@ -477,6 +460,14 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 ### "pathAttributes" Properties
 
+* `brush`: [object|null]
+* `brushColor`: [#RRGGBB|#RRGGBBAA]
+* `brushTexture`: [object|null]
+* `fill`: [object|null]
+* `fillColor`: [#RRGGBB|#RRGGBBAA]
+* `fillTexture`: [object|null]
+* `fillType`: [flat|gradient|pattern|null]
+
 ```json
 {
 	"pathAttributes": {
@@ -504,14 +495,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	}
 }
 ```
-
-* `brush`: [object|null]
-* `brushColor`: [#RRGGBB|#RRGGBBAA]
-* `brushTexture`: [object|null]
-* `fill`: [object|null]
-* `fillColor`: [#RRGGBB|#RRGGBBAA]
-* `fillTexture`: [object|null]
-* `fillType`: [flat|gradient|pattern|null]
 
 #### "brush" Properties
 
@@ -595,6 +578,9 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 
 #### "fill" Properties
 
+* `gradient`: [object|null]
+* `pattern`: [object|null]
+
 ```json
 {
 	"fill": {
@@ -615,9 +601,6 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 	}
 }
 ```
-
-* `gradient`: [object|null]
-* `pattern`: [object|null]
 
 ##### "gradient" Properties
 
@@ -702,6 +685,10 @@ C:\Users\[USERNAME]\AppData\Roaming\Adobe\Fireworks CS6\Commands
 }
 ```
 
+## Bug reports
+
+1. Submit via Github issues with the version of your OS and Fireworks.
+
 ## Lisence
 
-The MIT License (MIT)
+This software is released under the MIT License, see LICENSE.
