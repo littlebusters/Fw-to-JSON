@@ -9,7 +9,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 
 ## Instllation
 
-Download the plugin zip and unzip. And put the unziped fonlder to the Fireworks "Commands" folder.
+[Download the plugin zip](https://github.com/littlebusters/Fw-to-JSON/archive/master.zip) and unzip, rename "Fw-to-JSON-master" to "Fw to JSON". And put the fonlder to the Fireworks "Commands" folder.
 
 ## Usage
 
