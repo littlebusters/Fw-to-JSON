@@ -1,6 +1,8 @@
 Fireworks to JSON
 =================
 
+![JSON to Layers HERO](http://creative-tweet.net/img/github/fw-to-json-hero.png)
+
 This command can export structure of the Fireworks PNG as a JSON file.
 
 **I have not test on Windows.** Please send a report.
@@ -9,7 +11,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 
 ## Instllation
 
-[Download the plugin zip](https://github.com/littlebusters/Fw-to-JSON/archive/master.zip) and unzip, rename "Fw-to-JSON-master" to "Fw to JSON". And put the fonlder to the Fireworks "Commands" folder.
+[Download the plugin zip](https://github.com/littlebusters/Fw-to-JSON/archive/master.zip) and unzip, **rename "Fw-to-JSON-master" to "Fw to JSON"**. And put the fonlder to the Fireworks "Commands" folder.
 
 ## Usage
 
@@ -22,7 +24,6 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 
 - **You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
 - If you have installed "Fireworks Console" and "DOM Inspector", Please disable.
-- Please you use this command with saved the document.
 - This command looks for the original texture and pattern file.
 - Patterned fill is exported as Fireworks PNG file.
 - Bitmap export as it is.
