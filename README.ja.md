@@ -3,34 +3,37 @@ Fireworks to JSON
 
 ![JSON to Layers HERO](http://creative-tweet.net/img/github/fw-to-json-hero.png)
 
-This command can export structure of the Fireworks PNG as a JSON file.
+このコマンドは、Fireworks PNGの構造（fw.DocumentDOM()）をJSONファイルとして書き出す拡張機能です。
 
-**I have not test on Windows.** Please send a report.
+**Windows版のFireworksではテストをしていません。** 使われたかたは、ぜひレポートを送ってください :)
 
-TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
+動画はこちら: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 
-## Instllation
+動画では、このコマンドで書き出したJSONを、Sketch 3のレイヤーに変換する[JSON to Layers](https://github.com/littlebusters/JSON-to-Layers)というプラグインを使っています。
 
-[Download the plugin zip](https://github.com/littlebusters/Fw-to-JSON/archive/master.zip) and unzip, **rename "Fw-to-JSON-master" to "Fw to JSON"**. And put the fonlder to the Fireworks "Commands" folder.
+## インストール
 
-## Usage
+ZIPファイルをダウンロードし伸張してください。**フォルダ名を「Fw-to-JSON-master」から「Fw to JSON」へ変更**し、FireworksのCommandsフォルダへ入れてください。
 
-1. Open the Firworks document.
-1. Commands › Fw to JSON › Fw to JSON.
-1. Select export folder.
-1. Export completion when displayed alert.
+## 使い方
 
-## Note
+1. Fireworks PNGを開きます。
+1. コマンド › Fw to JSON › Fw to JSONを選択します。
+1. 書き出しするフォルアダを選択します。
+1. アラートが表示されたら書き出しが完了です。
 
-- **You have to revert the document. Because symbol is detach instance, you don't save absolutely the document.**
-- If you have installed "Fireworks Console" and "DOM Inspector", Please disable.
-- This command looks for the original texture and pattern file.
-- Patterned fill is exported as Fireworks PNG file.
-- Bitmap export as it is.
+## 注意点
 
-## JSON Format
+- シンボルインスタンスは内容を解析するため、シンボルからリンクを解除しています。コマンド実行後は「復帰」させるか、**必ず保存せず**閉じてください。
+- ビットマップやテクスチャー・パターンは別ファイルとして書き出しを行います。非表示にしていても書き出すようにしているため、オブジェクトが多い場合はファイルを整理してから実行してください。
+- 書き出しとしていますが、正確には「オブジェクトをコピー→新規ドキュメント作成→ペースト→保存」を繰り返します。結構な負荷がかかると思われますので、必ず保存をしてから実行するようにしてください。
+- ビットマップは現在の状態そのままを書き出します。解像度が大きな画像でも縮小していれば、縮小した状態を100%として書き出します。
+- 任意に適用しているパターンとテクスチャは、初回に読み込んだ場所を見に行きます。ファイルがない場合は、falseを設定します。改めて同じものを同じ場所に置いておくのも手です。
+- "Fireworks Console" または "DOM Inspector"（もしくは両方）をインストールしている場合は、インスペクタを非表示にした状態でFireworksを再起動するか、Extension Managerで無効化してください。
 
-### Top Level Properties
+## 書き出されるJSONについて
+
+### 最上位のプロパティ
 
 ```json
 {
@@ -42,7 +45,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "documentSetting" Properties
+### "documentSetting" プロパティ
 
 ```json
 {
@@ -63,7 +66,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "pages" Properties
+### "pages" プロパティ
 
 ```json
 {
@@ -83,7 +86,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "symbols" Properties
+### "symbols" プロパティ
 
 * `elements`: same `elems`
 
@@ -100,7 +103,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "frames" Properties
+### "frames" プロパティ
 
 ```json
 {
@@ -112,7 +115,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "topLayers" Properties
+### "topLayers" プロパティ
 
 ```json
 {
@@ -130,7 +133,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "elems" Properties (common properties)
+### "elems" プロパティ (共通プロパティ)
 
 - layer
 - rectangle
@@ -142,7 +145,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 - layer
 - bitmap
 
-#### "type = layer" Properties
+#### "type = layer" プロパティ
 
 `parentLayerNum`: Array index of parent layer. `-1` is topLayer.
 
@@ -161,7 +164,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = rectangle" Properties (same common properties)
+#### "type = rectangle" プロパティ (同様の共通プロパティ)
 
 * `pathAttributes`: [object]
 * `effectList`: [object|null]
@@ -198,7 +201,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = symbol" Properties
+#### "type = symbol" プロパティ
 
 ```json
 {
@@ -228,7 +231,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = bitmap" Properties
+#### "type = bitmap" プロパティ
 
 ```json
 {
@@ -256,7 +259,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = text" Properties
+#### "type = text" プロパティ
 
 ```json
 {
@@ -322,7 +325,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = group" Properties
+#### "type = group" プロパティ
 
 * `elements`: same `elmes` properties
 
@@ -354,7 +357,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = slice" Properties
+#### "type = slice" プロパティ
 
 ```json
 {
@@ -386,7 +389,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "type = path" Properties
+#### "type = path" プロパティ
 
 ```json
 {
@@ -459,7 +462,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "pathAttributes" Properties
+### "pathAttributes" プロパティ
 
 * `brush`: [object|null]
 * `brushColor`: [#RRGGBB|#RRGGBBAA]
@@ -497,7 +500,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "brush" Properties
+#### "brush" プロパティ
 
 ```json
 {
@@ -577,7 +580,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-#### "fill" Properties
+#### "fill" プロパティ
 
 * `gradient`: [object|null]
 * `pattern`: [object|null]
@@ -603,7 +606,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-##### "gradient" Properties
+##### "gradient" プロパティ
 
 ```json
 {
@@ -649,7 +652,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-##### "pattern" Properties
+##### "pattern" プロパティ
 
 ```json
 {
@@ -663,7 +666,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-##### "fillTexture" Properties
+##### "fillTexture" プロパティ
 
 ```json
 {
@@ -675,7 +678,7 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-### "mask" Properties
+### "mask" プロパティ
 
 ```json
 {
@@ -686,10 +689,10 @@ TL;DR: [Fireworks to Sketch 3 — QuickCast.](http://quick.as/pk7yuzz8b)
 }
 ```
 
-## Bug reports
+## バグ報告
 
-1. Submit via Github issues with the version of your OS and Fireworks.
+GitHubのIssuesへお使いのOSとFireworksのバージョンを書き込んでください。
 
-## Lisence
+## ライセンス
 
-This software is released under the MIT License, see LICENSE.
+MITライセンスです。詳しくは、LICENSEをご確認ください。
